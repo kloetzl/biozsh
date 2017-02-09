@@ -1,0 +1,52 @@
+#compdef phylip
+
+_phylip() {
+	local ret=1
+	if ((CURRENT == 2)); then
+		ret=0
+		# The description of the sub commands were taken from the phylip web page.
+		_describe 'phylip program' '(
+			clique:Finds\ the\ largest\ clique\ of\ mutually\ compatible\ characters,\ and\ the\ phylogeny\ which\ they\ recommend
+			consense:Computes\ consensus\ trees\ by\ the\ majority-rule\ consensus\ tree\ method
+			contml:Estimates\ phylogenies\ from\ gene\ frequency\ data\ by\ maximum\ likelihood
+			contrast:Produces\ the\ independent\ contrasts\ for\ continuous\ character\ data
+			dnacomp:Estimates\ phylogenies\ from\ nucleic\ acid\ sequence\ data\ using\ the\ compatibility\ criterion
+			dnadist:Computes\ four\ different\ distances\ between\ species\ from\ nucleic\ acid\ sequences
+			dnainvar:Computes\ Lakes\ and\ Cavenders\ phylogenetic\ invariants,\ which\ test\ alternative\ tree\ topologies
+			dnaml:Estimates\ phylogenies\ from\ nucleotide\ sequences\ by\ maximum\ likelihood
+			dnamlk:Same\ as\ DNAML\ but\ assumes\ a\ molecular\ clock
+			dnamove:Interactive\ construction\ of\ phylogenies\ from\ nucleic\ acid\ sequences
+			dnapars:Estimates\ phylogenies\ by\ the\ parsimony\ method\ using\ nucleic\ acid\ sequences
+			dnapenny:Finds\ all\ most\ parsimonious\ phylogenies\ for\ nucleic\ acid\ sequences\ by\ branch-and-bound\ search
+			dollop:Estimates\ phylogenies\ by\ the\ Dollo\ or\ polymorphism\ parsimony\ criteria\ for\ discrete\ character\ data\ with\ two\ states
+			dolmove:Interactive\ construction\ of\ phylogenies\ using\ the\ Dollo\ or\ polymorphism\ parsimony\ criteria
+			dolpenny:Finds\ all\ most\ parsimonious\ phylogenies\ for\ discrete\ character\ data\ with\ two\ states
+			drawgram:Plots\ rooted\ phylogenies,\ cladograms,\ circular\ trees\ and\ phenograms
+			drawtree:Similar\ to\ DRAWGRAM\ but\ plots\ unrooted\ phylogenies
+			factor:Takes\ discrete\ multistate\ data\ with\ character\ state\ trees\ and\ produces\ the\ corresponding\ data\ set\ with\ two\ states
+			fitch:Estimates\ phylogenies\ from\ distance\ matrix\ data\ under\ the\ additive\ tree\ model
+			gendist:Computes\ one\ of\ three\ different\ genetic\ distance\ formulas\ from\ gene\ frequency\ data
+			kitsch:Estimates\ phylogenies\ from\ distance\ matrix\ data\ under\ the\ ultrametric\ mode
+			mix:Estimates\ phylogenies\ by\ some\ parsimony\ methods\ for\ discrete\ character\ data\ with\ two\ states
+			move:Interactive\ construction\ of\ phylogenies\ from\ discrete\ character\ data\ with\ two\ states
+			neighbor:An\ implementation\ of\ Neighbor\ Joining\ and\ of\ the\ UPGMA\ method.
+			pars:Multistate\ discrete-characters\ parsimony\ method
+			penny:Finds\ all\ most\ parsimonious\ phylogenies\ for\ discrete-character\ data\ with\ two\ states
+			proml:Estimates\ phylogenies\ from\ protein\ amino\ acid\ sequences\ by\ maximum\ likelihood
+			promlk:Same\ as\ PROML\ but\ assumes\ a\ molecular\ clock
+			protdist:Computes\ a\ distance\ measure\ for\ protein\ sequences,\ using\ maximum\ likelihood\ estimates
+			protpars:Estimates\ phylogenies\ from\ protein\ sequences\ using\ the\ parsimony\ method
+			restdist:Distances\ calculated\ from\ restriction\ sites\ data\ or\ restriction\ fragments\ data
+			restml:Estimation\ of\ phylogenies\ by\ maximum\ likelihood\ using\ restriction\ sites\ data
+			retree:Reads\ in\ a\ tree\ and\ allows\ you\ to\ reroot\ the\ tree
+			seqboot:Reads\ in\ a\ data\ set,\ and\ produces\ multiple\ data\ sets\ from\ it\ by\ bootstrap\ resampling
+			treedist:Computes\ the\ Branch\ Score\ distance\ between\ trees
+		)'
+	else
+		# phylip does not take any further arguments
+		ret=1
+	fi
+	return ret
+}
+
+_phylip

@@ -1,0 +1,85 @@
+#compdef mat
+
+_mat-compare() {
+	local args
+	args+=(
+		'(-f --full)'{-f,--full}'[output full distance matrix]'
+		'--help[print help]'
+	)
+	_arguments -w -s -W $args[@] '*:file:_files'
+}
+
+_mat-format() {
+	local args
+	args+=(
+		'(-f -v --fix --validate)'{-f,--fix}'[fix small errors]'
+		'(--format)--format=[the format string]'
+		'(--precision)--precision=[precision to use in comparisons]:float'
+		'(--separator)--separator=[the cell separator]:char'
+		'(--sort)--sort[sort by name]'
+		'(-v --validate)'{-v,--validate}'[validate for correctness]'
+		'(-h --help)'{-h,--help}'[print help]'
+	)
+	_arguments -w -s -W $args[@] '*:file:_files'
+}
+
+_mat-grep() {
+	local args
+	args+=(
+		'(-v --invert-match)'{-v,--invert-match}'[select non-matching names]'
+		'(-h --help)'{-h,--help}'[print help]'
+	)
+	# FIXME: Missing pattern
+	_arguments -w -s -W $args[@] '*:file:_files'
+}
+
+_mat-nj() {
+	local args
+	args+=(
+		'(-h --help)'{-h,--help}'[print help]'
+	)
+	_arguments -w -s -W $args[@] '*:file:_files'
+}
+
+_mat() {
+	local ret=1
+	if ((CURRENT == 2)); then
+		# complete args and commands
+		args+=(
+			'(--version)--version[print version information]'
+			'(--help)--help[print help]'
+		)
+
+		_arguments -w -s -W -S $args[@]
+		_describe 'mat command' '(
+			compare:compute\ the\ distance\ between\ two\ matrices
+			format:format\ distance\ matrix
+			grep:print\ submatrix\ for\ names\ matching\ a\ pattern
+			nj:convert\ to\ a\ tree\ by\ neighbor\ joining
+		)'
+		ret=0
+		return ret
+	else
+		# delegate to sub commands
+		local subcmd=$words[2]
+		case $subcmd in
+			compare)
+				_mat-compare && ret=0
+				;;
+			format)
+				_mat-format && ret=0
+				;;
+			grep)
+				_mat-grep && ret=0
+				;;
+			nj)
+				_mat-nj && ret=0
+				;;
+		esac
+		return ret
+	fi
+
+	local args
+}
+
+_mat
