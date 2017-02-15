@@ -1,0 +1,76 @@
+#compdef blastn
+
+# Descriptions are mostly taken from https://www.ncbi.nlm.nih.gov/books/NBK279675/
+# More descriptions from http://computing.bio.cam.ac.uk/local/doc/blast+_user_manual.pdf
+
+_blastn() {
+	local ret=1
+	local args
+	args+=(
+		'(-best_hit_overhang)-best_hit_overhang[Best Hit algorithm overhang value]:float_value: '
+		'(-best_hit_score_edge)-best_hit_score_edge[Best Hit algorithm score edge value]:float_value: '
+		'(-culling_limit)-culling_limit[Delete a hit that is enveloped by at least this many higher-scoring hits]:int_value: '
+		'(-db)-db[BLAST data base]:db_file:_files'
+		'(-db_hard_mask)-db_hard_mask[Filtering algorithm ID to apply to the BLAST database as hard mask]:filtering_algorithm: '
+		'(-db_soft_mask)-db_soft_mask[Filtering algorithm ID to apply to the BLAST database as soft mask]:filtering_algorithm: '
+		'(-dbsize)-dbsize[Effective size of the database]:num_letters: '
+		'(-dust)-dust[Filter query sequence with dust]:DUST_options: '
+		'(-entrez_query)-entrez_query[Restrict search with the given Entrez query]:entrez_query: '
+		'(-evalue)-evalue[Expected Value (E) for saving hits]:evalue: '
+		'(-export_search_strategy)-export_search_strategy[Record search strategy to this file]:filename:_files'
+		'(-filtering_db)-filtering_db[Mask query using the sequences in this database]:filtering_database:_files'
+		'(-gapextend)-gapextend[Cost to extend a gap]:extend_penalty: '
+		'(-gapopen)-gapopen[Cost to open a gap]:open_penalty: '
+		'(-gilist)-gilist[Restrict search of database to GI’s listed in this file]:filename:_files'
+		'(-h -help)'{-h,--help}'[Show help]'
+		'(-html)-html[Produce HTML output]'
+		'(-import_search_strategy)-import_search_strategy[Search strategy file to read]:filename:_files'
+		'(-index_name)-index_name[MegaBLAST database index name]:string: '
+		'(-lcase_masking)-lcase_masking[Use lower case filtering in query and subject sequences]'
+		'(-line_length)-line_length[Line length for output]:line_length: '
+		'(-max_hsps)-max_hsps[Maximum number of HSPs to keep]:int_value: '
+		'(-max_target_seqs)-max_target_seqs[Number of aligned sequences to keep]:num_sequences: '
+		'(-min_raw_gapped_score)-min_raw_gapped_score[Minimum raw gapped score to keep an alignment in the preliminary gapped and trace-back stages]:int_value: '
+		'(-negative_gilist)-negative_gilist[Restrict search of database to everything except the GI’s listed in this file]:filename:_files'
+		'(-no_greedy)-no_greedy[Use non-greedy dynamic programming extension]'
+		'(-num_alignments)-num_alignments[Show alignments for this number of database sequences]:int_value: '
+		'(-num_descriptions)-num_descriptions[Show one-line descriptions for this number of database sequences]:int_value: '
+		'(-num_threads)-num_threads[Number of threads (CPUs) to use in blast search]:int_value: '
+		'(-off_diagonal_range)-off_diagonal_range[Maximum number of diagonals separating two hits used to initiate an extension]:int_value: '
+		'(-out)-out[Output file name]:output_file:_files'
+		'(-outfmt)-outfmt[Output format]:format:((0\:pairwise 1\:query-anchored\ showing\ identities 2\:query-anchored\ no\ identities 3\:flat\ query-anchored,\ show\ identities 4\:flat\ query-anchored,\ no\ identities 5\:XML\ Blast\ output 6\:tabular 7\:tabular\ with\ comment\ lines 8\:Text\ ASN.1 9\:Binary\ ASN 10\:Comma-separated\ value 11\:BLAST\ archive\ format\ \(ASN.1\)))'
+		'(-parse_deflines)-parse_deflines[Parse query and subject bar delimited sequence identifiers]'
+		'(-penalty)-penalty[Penalty for a nucleotide mismatch]:penalty: '
+		'(-perc_identity)-perc_identity[Percent identity cutoff]:float_value: '
+		'(-qcov_hsp_perc)-qcov_hsp_perc[(undocumented)]:float_value: '
+		'(-query)-query[Query file name]:input_file:_files'
+		'(-query_loc)-query_loc[Location on the query sequence]:range: '
+		'(-remote)-remote[Execute search on NCBI servers]'
+		'(-reward)-reward[Reward for a nucleotide match]:reward: '
+		'(-searchsp)-searchsp[Effective length of the search space]:int_value: '
+		'(-seqidlist)-seqidlist[(undocumented)]:filename:_files'
+		'(-show_gis)-show_gis[Show NCBI GIs in report]'
+		'(-soft_masking)-soft_masking[Apply filtering locations as soft masks]:soft_masking: '
+		'(-strand)-strand[Query strands to search against database/subject]:strand:(both minus plus)'
+		'(-subject)-subject[File with subject sequence(s) to search]:subject_input_file:_files'
+		'(-subject_loc)-subject_loc[Location on the subject sequence]:range: '
+		'(-sum_stats)-sum_stats[(undocumented)]:bool_value: '
+		'(-task)-task[Commonly performed tasks]:task_name:((blastn\:Traditional\ BLASTN\ requiring\ an\ exact\ match\ of\ 11 blastn-short\:BLASTN\ program\ optimized\ for\ sequences\ shorter\ than\ 50\ bases megablast\:Traditional\ megablast\ used\ to\ find\ very\ similar\ sequences dc-megablast\:Discontiguous\ megablast\ used\ to\ find\ more\ distant\ sequences))'
+		'(-template_length)-template_length[Discontiguous MegaBLAST template length]:int_value: '
+		'(-template_type)-template_type[Discontiguous MegaBLAST template type]:type:(coding optimal coding_and_optimal)'
+		'(-ungapped)-ungapped[Perform ungapped alignment]'
+		'(-use_index)-use_index[Use MegaBLAST database index]:boolean:(true false)'
+		'(-version)-version[Print version information]'
+		'(-window_masker_db)-window_masker_db[Enable WindowMasker filtering using this file]:window_masker_db:_files'
+		'(-window_masker_taxid)-window_masker_taxid[Enable WindowMasker filtering using a Taxonomic ID]:window_masker_taxid: '
+		'(-window_size)-window_size[Multiple hits window size, use 0 to specify 1-hit algorithm]:int_value: '
+		'(-word_size)-word_size[Length of initial exact match]:int_value: '
+		'(-xdrop_gap)-xdrop_gap[Heuristic value for preliminary gapped extensions]:float_value: '
+		'(-xdrop_gap_final)-xdrop_gap_final[Heuristic value for final gapped alignment]:float_value: '
+		'(-xdrop_ungap)-xdrop_ungap[Heuristic value for ungapped extensions]:float_value: '
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_blastn
