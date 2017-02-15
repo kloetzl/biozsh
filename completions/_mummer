@@ -1,0 +1,26 @@
+#compdef mummer
+
+# Usage: mummer [options] <reference-file> <query-files>
+
+
+_mummer(){
+	local ret=1
+	local args
+	args+=(
+		'(-b -r)-b[compute forward and reverse complement matches]'
+		'(-c)-c[report the query-position of a reverse complement match relative to the original query sequence]'
+		'(-F)-F[force 4 column output format regardless of the number of reference sequence inputs]'
+		'(-h -help)'{-h,-help}'[show possible options]'
+		'(-l)-l[set the minimum length of a match if not set, the default value is 20]:length: '
+		'(-L)-L[show the length of the query sequences on the header line]'
+		'(-maxmatch -mum -mumreference -mumcand)-maxmatch[compute all maximal matches regardless of their uniqueness]'
+		'(-maxmatch -mum -mumreference -mumcand)-mum[compute maximal matches that are unique in both sequences]'
+		'(-maxmatch -mum -mumreference -mumcand)'{-mumreference,-mumcand}'[compute maximal matches that are unique in the reference but not necessarily in the query-sequence (default)]'
+		'(-n)-n[match only the characters a, c, g, or t; they can be in upper or in lower case]'
+		'(-b -r)-r[only compute reverse complement matches]'
+		'(-s)-s[show the matching substrings]'
+	)
+	_arguments $args[@] '*:file:_files'
+}
+
+_mummer
