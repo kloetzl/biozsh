@@ -1,0 +1,4 @@
+#!/usr/bin/zsh
+
+# Make figtree read from stdin in pipelines
+figtree =( cat $*)
