@@ -25,11 +25,13 @@ _mat-format() {
 
 _mat-grep() {
 	local args
+	# The second argument is the patter, do not autocomplete. But *do* try
+	# to complete, if it could be an argument.
 	args+=(
+		'2: :_guard "^-" pattern'
 		'(-v --invert-match)'{-v,--invert-match}'[select non-matching names]'
 		'(-h --help)'{-h,--help}'[print help]'
 	)
-	# FIXME: Missing pattern
 	_arguments -w -s -W $args[@] '*:file:_files'
 }
 
