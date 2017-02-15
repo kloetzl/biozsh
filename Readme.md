@@ -11,7 +11,7 @@ I still have to figure out, how to do a proper installation. But this should wor
     cd biozsh
     make install-dev
 
-Restarting the shell will give you access the new features.
+Restarting the shell will give you access to the new features.
 
 
 ### License
