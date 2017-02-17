@@ -14,7 +14,20 @@ I still have to figure out, how to do a proper installation. But this should wor
 Restarting the shell will give you access to the new features.
 
 
-### License
+## Usage
+
+Depending on your ZSH style using the auto completion is as simple as pressing TAB. Here is what it looks like for me if I press TAB, just after typing `blastn -db`.
+
+![blastn -db completion](https://github.com/kloetzl/biozsh/raw/master/blastn1.png)
+
+Blastn supports a variety of different output format. Now you don't have to remember their weird codes anymore, just press TAB!
+
+![blastn -outfmt completion](https://github.com/kloetzl/biozsh/raw/master/blastn2.png)
+
+Checkout the [completions](completions) directory for all supported tools.
+
+
+## License
 
 Copyright (c) 2017  Fabian Klötzl  
 MIT License, See [License](License) for details.
