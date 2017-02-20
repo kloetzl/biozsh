@@ -1,0 +1,49 @@
+#compdef _velveth velveth
+
+# ./velveth directory hash_length {[-file_format][-read_type][-separate|-interleaved] filename1 [filename2 ...]} {...} [options]
+# 	hash_length	: EITHER an odd integer (if even, it will be decremented) <= 31 (if above, will be reduced)
+# 			: OR: m,M,s where m and M are odd integers (if not, they will be decremented) with m < M <= 31 (if above, will be reduced)
+# 				and s is a step (even number). Velvet will then hash from k=m to k=M with a step of s
+
+# This could be more sophisticated using a state machine, but I'll leave it at this for now.
+
+_velveth() {
+	local args
+	args+=(
+		'1:directory:_files -/'
+		'2:hash length:'
+		# File format options:
+		'*-fasta[Fasta format]'
+		'*-fastq[FastQ format]'
+		'*-raw[Raw format]'
+		'*-fasta.gz[Zipped Fasta format]'
+		'*-fastq.gz[Zipped FastQ format]'
+		'*-raw.gz[Zipped raw format]'
+		'*-sam[SAM format]'
+		'*-bam[BAM format]'
+		'*-fmtAut[Auto detect FastA/Q format]'
+		# File layout options for paired reads (only for fasta and fastq formats):
+		'*-interleaved[File contains paired reads interleaved in the one file (default)]'
+	 	'*-separate[Read two separate files for paired reads]'
+	 	# Read type options:
+		'*-short'
+		'*-shortPaired'
+		'*-short2'
+		'*-shortPaired2'
+		'*-long'
+		'*-longPaired'
+		'*-reference'
+	 	# Options:
+		'-strand_specific[For strand specific transcriptome sequencing data]'
+		'-reuse_Sequences[Reuse Sequences file (or link) already in directory]'
+		'-reuse_binary[Reuse binary sequences file (or link) already in directory]'
+		'-noHash[Simply prepare Sequences file, do not hash reads or prepare Roadmaps file]'
+		'-create_binary[Create binary CnyUnifiedSeq file]'
+		'*:file:_files'
+	)
+
+	_arguments $args[@]
+}
+
+_velveth
+
