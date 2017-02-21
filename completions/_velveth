@@ -1,4 +1,4 @@
-#compdef _velveth velveth
+#compdef velveth
 
 # ./velveth directory hash_length {[-file_format][-read_type][-separate|-interleaved] filename1 [filename2 ...]} {...} [options]
 # 	hash_length	: EITHER an odd integer (if even, it will be decremented) <= 31 (if above, will be reduced)
