@@ -6,7 +6,7 @@ _mat-compare() {
 		'(-f --full)'{-f,--full}'[output full distance matrix]'
 		'--help[print help]'
 	)
-	_arguments -w -s -W $args[@] '*:file:_files'
+	_arguments -w -s -S $args[@] '*:file:_files'
 }
 
 _mat-format() {
@@ -20,19 +20,19 @@ _mat-format() {
 		'(-v --validate)'{-v,--validate}'[validate for correctness]'
 		'(-h --help)'{-h,--help}'[print help]'
 	)
-	_arguments -w -s -W $args[@] '*:file:_files'
+	_arguments -w -s -S $args[@] '*:file:_files'
 }
 
 _mat-grep() {
 	local args
-	# The second argument is the patter, do not autocomplete. But *do* try
+	# The second argument is the pattern, do not autocomplete. But *do* try
 	# to complete, if it could be an argument.
 	args+=(
 		'2: :_guard "^-" pattern'
 		'(-v --invert-match)'{-v,--invert-match}'[select non-matching names]'
 		'(-h --help)'{-h,--help}'[print help]'
 	)
-	_arguments -w -s -W $args[@] '*:file:_files'
+	_arguments -w -s -S $args[@] '*:file:_files'
 }
 
 _mat-nj() {
@@ -40,7 +40,7 @@ _mat-nj() {
 	args+=(
 		'(-h --help)'{-h,--help}'[print help]'
 	)
-	_arguments -w -s -W $args[@] '*:file:_files'
+	_arguments -w -s -S $args[@] '*:file:_files'
 }
 
 _mat() {
@@ -52,7 +52,7 @@ _mat() {
 			'(--help)--help[print help]'
 		)
 
-		_arguments -w -s -W -S $args[@]
+		_arguments -w -s -S -S $args[@]
 		_describe 'mat command' '(
 			compare:compute\ the\ distance\ between\ two\ matrices
 			format:format\ distance\ matrix
