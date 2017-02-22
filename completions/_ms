@@ -1,0 +1,36 @@
+#compdef ms
+
+# A rough sketch of ms parameters. The descriptions are terrible and
+# some paramaters may only occur after others. Won't fix that anytime soon.
+
+local args ret=1
+
+args+=(
+	'1:nsam:'
+	'2:howmany:'
+	'-F[Output only sites with freq of minor allele >= minfreq]:minfreq:'
+	'-G[alpha = -log(Np/Nr)/t]:alpha:'
+	'-I[all elements of mig matrix set to mig_rate/(npop-1)]:npop:'
+	'-T[Output gene tree]'
+	'-c[ratio of conversion rate to rec rate. tracklen is mean length]:f: :track_len:'
+	'-eG[Modify growth rate of all pop s]:t: :alpha:'
+	'-eM[Modify the mig matrix so all elements are mig_rate/(npop-1)]:t: :mig_rate: '
+	'-eN[Modify pop sizes. New sizes = size*N0]:t: :size: '
+	'-eg[Modify growth rate of pop i]:t: :i: :alpha_i:'
+	'-ej[Join lineages in pop i and pop j into pop j]:t: :i: :j:'
+	'-em[i,j-th element of mig matrix set to m_ij at time t]:t: :i: :j: :m_ij:'
+	'-en[Modify pop size of pop i. New size of popi = size_i*N0]:t: :i: :size_i: '
+	'-es[Split pop i -> pop-i + pop-npop, npop increases by 1]:t: :i: :proportion:'
+	'-f[Read command line arguments from file filename]:file:_files'
+	'-g[set the growth rate of subpopulation i]:i: :alpha_i:'
+	'-m[i,j-th element of mig matrix set to m_ij]:i: :j: :m_ij:'
+	'-ma[Assign values to elements of migration matrix]'
+	'-n[popi has size set to size_i*N0]:i: :size_i:'
+	'-p[Specifies the precision of the position output]:significant digits:'
+	'-r[rho nsites]:rho: :nsites: '
+	'-s[Fixed number of segregating sites]:segsites:'
+	'-t[Theta = 4*N0*u]:theta:'
+)
+
+_arguments $args[@] && ret=0
+return ret
