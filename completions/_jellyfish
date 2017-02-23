@@ -1,0 +1,141 @@
+#compdef jellyfish
+
+# I'll just leave this half finished. The jellyfish help is excellent and might
+# serve as a starting point for someone willing to participate.
+
+_jellyfish-info() {
+	local ret=1 args
+	args+=(
+		'(-s --skip)'{-s,--skip}'[Skip header and dump remainder of file]'
+		'(-j --json)'{-j,--json}'[Dump full header in JSON format]'
+		'(-c --cmd)'{-c,--cmd}'[Display only the command line]'
+		'(-U --usage)'{-U,--usage}'[Usage]'
+		'(- *)'{-h,--help}'[This message]'
+		'(- *)'{-V,--version}'[Version]'
+		'*:file:_files'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_jellyfish-bc() {
+	local ret=1 args
+	args+=(
+		'(-s --size)'{-s+,--size=}'[Expected number of k-mers in input (required)]:uint64:'
+		'(-m --mer-len)'{-m+,--mer-len=}'[Length of mer (required)]:uint32:'
+		'(-f --fpr)'{-f+,--fpr=}'[False positive rate (default: 0.001)]:double:'
+		'(-C --canonical)'{-C,--canonical}'[Count both strand, canonical representation]'
+		'(-t --threads)'{-t+,--threads=}'[Number of threads]:uint32:'
+		'(-o --output)'{-o+,--output=}'[Output file]:string:_files'
+		'(-F --Files)'{-F+,--Files=}'[Number files open simultaneously]:uint32:'
+		'(-g --generator)'{-g+,--generator=}'[File of commands generating fasta]:path:_files'
+		'(-G --Generators)'{-G+,--Generators=}'[Number of generators run simultaneously]:uint32:'
+		'(-S --shell)'{-S+,--shell=}'[Shell used to run generator commands]:string:'
+		'(--timing)--timing=[Print timing information]:Timing file:_files'
+		'(-U --usage)'{-U,--usage}'[Usage]'
+		'(- *)'{-h,--help}'[This message]'
+		'(- *)'{-V,--version}'[Version]'
+		'*:file:_files'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_jellyfish-count() {
+	local ret=1
+	local args
+	args+=(
+		'(-m --mer-len)'{-m+,--mer-len=}'[Length of mer]:uint32: '
+		'(-s --size)'{-s+,--size=}'[Initial hash size]:uint64: '
+		'(-t --threads)'{-t+,--threads=}'[Number of threads (default\: 1)]:uint32:'
+		'(-F --Files)'{-F+,--Files=}'[Number files open simultaneously (1)]:uint32:'
+		'(-g --generator)'{-g+,--generator=}'[File of commands generating fastaq]:path:_files'
+		'(-G --Generators)'{-G+,--Generators=}'[Number of generators run simultaneously (1)]:uint32:'
+		'(-S --shell)'{-S+,--shell=}'[Shell used to run generator commands ($SHELL or /bin/sh)]:string:'
+		'(-o --output)'{-o+,--output=}'[Output file (mer_counts.jf)]:string:_files'
+		'(-c --counter-len)'{-c+,--counter-len=}'[Length bits of counting field (default\: 7)]:Length:'
+		'(--out-counter-len)--out-counter-len=[Length in bytes of counter field in output (default: 4)]:Length:'
+		'(-C --canonical)'{-C,--canonical}'[Count both strand, canonical representation]'
+		'(--bc)--bc=[Bloom counter to filter out singleton mers]:peath:'
+		'(--bf-size)--bf-size=[Use bloom filter to count high-frequency mers]:uint64:'
+		'(--bf-fp)--bf-fp=[False positive rate of bloom filter (default\: 0.01)]:double:'
+		'(--if)--if=[Count only k-mers in this files]:path:_files'
+		'(-Q --min-qual-char)'{-Q+,--min-qual-char=}'[Any base with quality below this character is changed to N]:string:'
+		'(-p --reprobes)'{-p+,--reprobes=}'[Maximum number of reprobes (default\: 126)]:uint32:'
+		'(--text)--text[Dump in text format]'
+		'(--disk)--disk[Disk operation. Do not do size doubling]'
+		'(-L --lower-count)'{-L+,--lower-count=}'[Do not output k-mer with count < lower-count]:uint64:'
+		'(-U --upper-count)'{-U+,--upper-count=}'[Do not output k-mer with count > upper-count]:uint64:'
+		'(--timing)--timing=[Print timing information]:Timing file:_files'
+		'(--usage)--usage[Usage]'
+		'(- *)'{-h,--help}'[This message]'
+		'(- *)--full-help[Detailed help]'
+		'(- *)'{-V,--version}'[Version]'
+		'*:file:_files'
+	)
+
+	_arguments -w -s -S $args[@] && ret=0
+	return ret
+}
+
+_jellyfish-stats() {
+	local ret=1 args
+	args+=(
+		'(-L --lower-count)'{-L+,--lower-count=}'[Do not consider k-mer with count < lower-count]:uint64:'
+		'(-U --upper-count)'{-U+,--upper-count=}'[Do not consider k-mer with count > upper-count]:uint64:'
+		'(-v --verbose)'{-v,--verbose}'[Verbose (false)]'
+		'(-o --output=string)'{-o,--output=string}'[Output file]'
+		'(--usage)'{--usage}'[Usage]'
+		'(-h --help)'{-h,--help}'[This message]'
+		'(--full-help)'{--full-help}'[Detailed help]'
+		'(-V --version)'{-V,--version}'[Version]'
+		'*:file:_files'
+	)
+	_arguments -w -s -S $args[@] && ret=0
+	return ret
+}
+
+_jellyfish() {
+	local ret=1
+	local args
+	if ((CURRENT == 2)); then
+		# complete args and commands
+		args+=(
+			'1:command:((
+				count\:Count\ k\-mers\ in\ fasta\ or\ fastq\ files
+				bc\:Create\ a\ bloom\ filter\ from\ the\ input\ k\-mers
+				info\:Display\ information\ about\ a\ jellyfish\ file
+				stats\:Display\ some\ statistics\ about\ the\ k\-mers\ in\ the\ hash
+				histo\:Create\ an\ histogram\ of\ k\-mer\ occurrences
+				dump\:c
+				merge\:d
+				query\:e
+				cite\:f
+				mem\:g
+				jf\:h
+			))'
+			'(- *)--version[Display version]'
+			'(- *)--help[Display help message]'
+		)
+
+		_arguments $args[@] && ret=0
+		return ret
+	else
+		# delegate to sub commands
+		local subcmd=$words[2]
+		case $subcmd in
+			info)
+				_jellyfish-info && ret=0
+				;;
+			bc)
+				_jellyfish-bc && ret=0
+				;;
+			count)
+				_jellyfish-count && ret=0
+				;;
+		esac
+		return ret
+	fi
+}
+
+_jellyfish
