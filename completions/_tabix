@@ -1,0 +1,32 @@
+#compdef tabix
+
+# Usage:   tabix [OPTIONS] [FILE] [REGION [...]]
+
+_tabix () {
+	local ret=1
+	local -a args
+	args+=(
+		'(-b --begin)'{-b+,--begin=}'[column number for region start (default 4)]:int:'
+		'(-c --comment)'{-c+,--comment=}'[skip comment lines starting with CHAR]:char:'
+		'(-C --csi)'{-C,--csi}'[generate CSI index for VCF (default is TBI)]'
+		'(-e --end)'{-e,--end}'[column number for region end (if no end, set INT to -b; default 5)]:int:'
+		'(-f --force)'{-f,--force}'[overwrite existing index without asking]'
+		'(-l --list-chroms)'{-l,--list-chroms}'[list chromosome names]'
+		'(-m --min-shift)'{-m+,--min-shift=}'[set minimal interval size for CSI indices to 2^INT (default 14)]:int:'
+		'(-H --only-header)'{-H,--only-header}'[print only the header lines]'
+		'(-p --preset)'{-p+,--preset=}'[gff, bed, sam, vcf]:str:(gff bed sam bam vcf bcf)'
+		'(-h --print-header)'{-h,--print-header}'[print also the header lines]'
+		'(-r --reheader)'{-r+,--reheader=}'[replace the header with the content of FILE]:file:_files'
+		'(-R --regions)'{-R+,--regions=}'[restrict to regions listed in the file]:file:_files'
+		'(-s --sequence)'{-s+,--sequence=}'[column number for sequence names (suppressed by -p, default 1)]:int:'
+		'(-S --skip-lines)'{-S+,--skip-lines=}'[skip first INT lines (default 0)]:int:'
+		'(-T --targets)'{-T+,--targets=}'[similar to -R but streams rather than index-jumps]:file:_files'
+		'(-0 --zero-based)'{-0,--zero-based}'[coordinates are zero-based]'
+		'(- *)--help[print help]'
+	)
+	# Provide autocompletion for regions?
+	_arguments -w -s -S $args[@] '*:files:_files' && ret=0
+	return ret
+}
+
+_tabix
