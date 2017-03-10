@@ -1,0 +1,64 @@
+#compdef prokka
+
+#prokka [options] <contigs.fasta>
+
+_prokka () {
+	local ret=1
+	local -a args
+	args+=(
+		# General:
+		'(- *)--citation[Print citation for referencing Prokka]'
+		'(- *)--docs[Show full manual/documentation]'
+		'(- *)--help[This help]'
+		'(- *)--version[Print version and exit]'
+		'--debug[Debug mode: keep all temporary files]'
+		'--quiet[No screen output]'
+		# Setup:
+		'--cleandb[Remove all database indices]'
+		'--depends[List all software dependencies]'
+		'--listdb[List all configured databases]'
+		'--setupdb[Index all installed databases]'
+		# Outputs:
+		'--accver=[Version to put in Genbank file (default 1)]: :'
+		'--addgenes[Add gene features for each CDS feature]'
+		'--addmrna[Add mRNA features for each CDS feature]'
+		'--centre=[Sequencing centre ID. (default '')]: :'
+		'--compliant[Force Genbank/ENA/DDJB compliance: --addgenes --mincontiglen 200 --centre XXX]'
+		'--force[Force overwriting existing output folder]'
+		'--gffver=[GFF version (default 3)]: :(1 2 3)'
+		'--increment=[Locus tag counter increment (default 1)]: :'
+		'--locustag=[Locus tag prefix]: :'
+		'--outdir=[Output folder]:dir:_files -/'
+		'--prefix=[Filename output prefix]: :'
+		# Organism details:
+		'--genus=[Genus name (default: Genus)]:string:'
+		'--plasmid=[Plasmid name or identifier]:string:'
+		'--species=[Species name (default: species)]:string:'
+		'--strain=[Strain name (default: strain)]:string:'
+		# Annotations:
+		'--cdsrnaolap[Allow RNA to overlap CDS]'
+		'--gcode=[Genetic code / Translation table (set if --kingdom is set)]: :'
+		'--gram=[Gram: -/neg +/pos]: :(+ - pos neg)'
+		'--hmms=[Trusted HMM to first annotate from]: :'
+		'--kingdom=[Annotation mode (default Bacteria)]: :(Archaea  Bacteria  Mitochondria  Viruses)'
+		'--metagenome[Improve gene predictions for highly fragmented genomes]'
+		'--proteins=[FASTA or GBK file to use as 1st priority]:file:_files'
+		'--rawproduct[Do not clean up /product annotation]'
+		'--usegenus[Use genus-specific BLAST databases (needs --genus)]'
+		# Computation:
+		'--cpus=[Number of CPUs to use (default 8, 0=all)]:int:'
+		'--evalue=[Similarity e-value cut-off (default 1e-06)]:float:'
+		'--fast[Fast mode - only use basic BLASTP databases]'
+		'--mincontiglen=[Minimum contig size (NCBI needs 200, default 1)]:int:'
+		'--noanno[For CDS just set /product="unannotated protein"]'
+		'--norrna[Do not run rRNA search]'
+		'--notrna[Do not run tRNA search]'
+		'--rfam[Enable searching for ncRNAs with Infernal+Rfam (SLOW!)]'
+		'--rnammer[Prefer RNAmmer over Barrnap for rRNA prediction]'
+	)
+
+	_arguments $args[@] '*:file:_files' && ret=0
+	return 0
+}
+
+_prokka
