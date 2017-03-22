@@ -1,0 +1,335 @@
+#compdef samtools
+
+# Usage:   samtools <command> [options]
+# see _samtools way below for the entrypoint
+
+
+
+_samtools-bamshuf() {
+	local ret=1
+	local -a args
+	args+=(
+		'-O[output to stdout]'
+		'-u[uncompressed BAM output]'
+		'-l+[compression level; default: 1]:int:'
+		'-n+[number of temporary files; default: 64]:int:'
+		'*:files:_files'
+	)
+	_arguments -w -s -S $args[@] && ret=0
+	return ret
+}
+
+_samtools-bedcov() {
+	_arguments '*:files:_files'
+	return 0
+}
+
+_samtools-calmd() {
+	local ret=1
+	local -a args
+	args+=(
+		# FIXME
+		# my version of samtools outputs the help for fillmd‽
+		'*:files:_files'
+	)
+	_arguments -w -s -S $args[@] && ret=0
+	return ret
+}
+
+_samtools-cat() {
+	local ret=1
+	local -a args
+	args+=(
+		'-h+[-h header.sam]:file:_files'
+		'-o+[-o out.bam]:file:_files'
+		'*:files:_files'
+	)
+	_arguments -w -s -S $args[@] && ret=0
+	return ret
+}
+
+_samtools-depth() {
+	local ret=1
+	local -a args
+	args+=(
+		'-b+[list of positions or regions]:bed:_files'
+		'-f+[list of input BAM filenames, one per line]:list:_files'
+		'-l+[minQLen]:int:'
+		'-q+[base quality threshold]:int:'
+		'-Q+[mapping quality threshold]:int:'
+		'-r+[chr:from-to]:region:'
+		'*:files:_files'
+	)
+	_arguments -w -s -S $args[@] && ret=0
+	return ret
+}
+
+_samtools-faidx() {
+	_arguments '*:files:_files'
+	return 0
+}
+
+_samtools-fixmate() {
+	local ret=1
+	local -a args
+	args+=(
+		'-r[remove unmapped reads and secondary alignments]'
+		'*:files:_files'
+	)
+	_arguments -w -s -S $args[@] && ret=0
+	return ret
+}
+
+_samtools-flagstat() {
+	_arguments '*:files:_files'
+	return 0
+}
+
+_samtools-idxstats() {
+	_arguments '*:files:_files'
+	return 0
+}
+
+_samtools-index() {
+	_arguments '*:files:_files'
+	return 0
+}
+
+_samtools-merge() {
+	local ret=1
+	local -a args
+	args+=(
+		'-1[compress level 1]'
+		'-@[number of BAM compression thread]:int:'
+		'-f[overwrite the output BAM if exist]'
+		'-h[copy the header in FILE to <out.bam>:FILE:_files'
+		'-l+[compression level, from 0 to 9]:int:'
+		'-n[sort by read names]'
+		'-r[attach RG tag (inferred from file names)]'
+		'-R+[merge file in the specified region]:str:'
+		'-u[uncompressed BAM output]'
+		'*:files:_files'
+	)
+	_arguments -w -s -S $args[@] && ret=0
+	return ret
+}
+
+_samtools-mpileup() {
+	_arguments '*:files:_files'
+	return 0
+}
+
+_samtools-phase() {
+	local ret=1
+	local -a args
+	args+=(
+		'-A[drop reads with ambiguous phase]'
+		'-b+[prefix of BAMs to output (default: null)]:str:'
+		'-D+[max read depth (default: 256)]:int:'
+		'-F[do not attempt to fix chimeras]'
+		'-k+[block length (default: 13)]:int:'
+		'-Q+[min base quality in het calling (default: 13)]:int:'
+		'-q+[min het phred-LOD (default: 37)]:int:'
+		'*:files:_files'
+	)
+	_arguments -w -s -S $args[@] && ret=0
+	return ret
+}
+
+_samtools-reheader() {
+	_arguments '*:files:_files'
+	return 0
+}
+
+_samtools-rmdup() {
+	local ret=1
+	local -a args
+	args+=(
+		'-s[rmdup for SE reads]'
+		'-S[treat PE reads as SE]'
+		'*:files:_files'
+	)
+	_arguments -w -s -S $args[@] && ret=0
+	return ret
+}
+
+_samtools-sort() {
+	local ret=1
+	local -a args
+	args+=(
+		'-@[number of sorting and compression thread (default: 1)]:int:'
+		'-f[use <out.prefix> as full file name instead of prefix]'
+		'-l+[compression level, from 0 to 9 (default: -1)]:int:'
+		'-m+[max memory per thread; suffix K/M/G recognize (default: 768M)]:int:'
+		'-n[sort by read name]'
+		'-o[final output to stdout]'
+		'*:files:_files'
+	)
+	_arguments -w -s -S $args[@] && ret=0
+	return ret
+}
+
+_samtools-targetcut() {
+	local ret=1
+	local -a args
+	args+=(
+		'-0+[-0 em0]:em0:'
+		'-1+[-1 em1]:em1:'
+		'-2+[-2 em2]:em2:'
+		'-f+[-f ref]:ref:'
+		'-i+[-i inPen]:inPen:'
+		'-Q+[-Q minQ]:minQ:'
+		'*:files:_files'
+	)
+	_arguments -w -s -S $args[@] && ret=0
+	return ret
+}
+
+_samtools-tview() {
+	local ret=1
+	local -a args
+	args+=(
+		'-d+[output format]:display:((
+			C\:Curses
+			H\:Html
+			T\:Text
+		))'
+		'-p+[got directly to this position]:chr pos:'
+		'-s+[display only reads from this sample or group]:str:'
+		'*:files:_files'
+	)
+	_arguments -w -s -S $args[@] && ret=0
+	return ret
+}
+
+_samtools-view() {
+	local ret=1
+	local -a args
+	args+=(
+		'-1[fast compression (force -b)]'
+		'-?[longer help]'
+		'-@[number of BAM compression threads (default: 0)]:int:'
+		'-B[collapse the backward CIGAR operation]'
+		'-b[output BAM]'
+		'-c[print only the count of matching records]'
+		'-F+[filtering flag, 0 for unset (default: 0)]:int:'
+		'-f+[required flag, 0 for unset (default: 0)]:int:'
+		'-h[print header for the SAM output]'
+		'-H[print header only (no alignments)]'
+		'-l+[only output reads in library STR (default: null)]:str:'
+		'-L+[output alignments overlapping the input BED FILE (default: null)]:file:_files'
+		'-o+[output file name (default: stdout)]:file:_files'
+		'-q+[minimum mapping quality (default: 0)]:int:'
+		'-R+[list of read groups to be outputted (default: null)]:file:_files'
+		'-r+[only output reads in read group STR (default: null)]:str:'
+		'-s+[fraction of templates to subsample; integer part as seed (default: -1)]:float:'
+		'-S[input is SAM]'
+		'-t+[list of reference names and lengths (force -S) (default: null)]:file:_files'
+		'-T+[reference sequence file (force -S) (default: null)]:file:_files'
+		'-u[uncompressed BAM output (force -b)]'
+		'-x[output FLAG in HEX (samtools-C specific)]'
+		'-X[output FLAG in string (samtools-C specific)]'
+		'*:files:_files'
+	)
+	_arguments -w -s -S $args[@] && ret=0
+	return ret
+}
+
+_samtools() {
+	local ret=1
+	local -a args
+	if ((CURRENT == 2)); then
+		args+=(
+			'1:command:((
+				bamshuf:shuffle\ and\ group\ alignments\ by\ name
+				bedcov:read\ depth\ per\ BED\ region
+				calmd:recalculate\ MD\/NM\ tags\ and\ =\ bases
+				cat:concatenate\ BAMs
+				depth:compute\ the\ depth
+				faidx:index/extract\ FASTA
+				fixmate:fix\ mate\ information
+				flagstat:simple\ stats
+				idxstats:BAM\ index\ stats\ \(r595\ or\ later\)
+				index:index\ alignment
+				merge:merge\ sorted\ alignments
+				mpileup:multi-way\ pileup
+				phase:phase\ heterozygotes
+				reheader:replace\ BAM\ header
+				rmdup:remove\ PCR\ duplicates
+				sort:sort\ alignment\ file
+				targetcut:cut\ fosmid\ regions\ \(for\ fosmid\ pool\ only\)
+				tview:text\ alignment\ viewer
+				view:SAM\<\-\>BAM\ conversion
+			))'
+			'(- *)--help[Display help message]'
+		)
+		_arguments $args[@] && ret=0
+		return ret
+	else
+		# delegate to sub commands
+		local subcmd=$words[2]
+		case $subcmd in
+			bamshuf)
+				_samtools-bamshuf && ret=0
+				;;
+			bedcov)
+				_samtools-bedcov && ret=0
+				;;
+			calmd)
+				_samtools-calmd && ret=0
+				;;
+			cat)
+				_samtools-cat && ret=0
+				;;
+			depth)
+				_samtools-depth && ret=0
+				;;
+			faidx)
+				_samtools-faidx && ret=0
+				;;
+			fixmate)
+				_samtools-fixmate && ret=0
+				;;
+			flagstat)
+				_samtools-flagstat && ret=0
+				;;
+			idxstats)
+				_samtools-idxstats && ret=0
+				;;
+			index)
+				_samtools-index && ret=0
+				;;
+			merge)
+				_samtools-merge && ret=0
+				;;
+			mpileup)
+				_samtools-mpileup && ret=0
+				;;
+			phase)
+				_samtools-phase && ret=0
+				;;
+			reheader)
+				_samtools-reheader && ret=0
+				;;
+			rmdup)
+				_samtools-rmdup && ret=0
+				;;
+			sort)
+				_samtools-sort && ret=0
+				;;
+			targetcut)
+				_samtools-targetcut && ret=0
+				;;
+			tview)
+				_samtools-tview && ret=0
+				;;
+			view)
+				_samtools-view && ret=0
+				;;
+		esac
+		return ret
+	fi
+}
+
+_samtools
+
