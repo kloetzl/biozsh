@@ -1,0 +1,54 @@
+#compdef mafft
+
+# TODO: Some of the arguments shoudl only be completed if another
+# one is already on the commandline. See mafft help for details.
+
+_mafft() {
+	local ret=1
+	local -a args
+	args+=(
+		'--6merpair[Distance is calculated based on the number of shared 6mers]'
+		'--auto[Automatically selects an appropriate strategy]'
+		'--genafpair[All pairwise alignments are computed with a local algorithm with the generalized affine gap cost]'
+		'--globalpair[All pairwise alignments are computed]'
+		'--localpair[All pairwise alignments are computed with the Smith-Waterman algorithm]'
+        '--aamatrix[Use a user-defined AA scoring matrix]:file:_files'
+        '--amino[Assume the sequences are amino acid]'
+        '--bl[BLOSUM number matrix is used]:number:'
+        '--clustalout[Output format: clustal format]'
+        '--dpparttree[The PartTree algorithm is used with distances based on DP]'
+        '--ep[Offset value]:number:'
+        '--fastapair[All pairwise alignments are computed with FASTA]'
+        '--fastaparttree[The PartTree algorithm is used with distances based on FASTA]'
+        '--fft[Use FFT approximation in group-to-group alignment]'
+        '--fmodel[Incorporate the AA/nuc composition information into the scoring matrix]'
+        '--groupsize[Do not make alignment larger than number sequences]:number:'
+        '--inputorder[Output order: same as input]'
+        '--jtt[JTT PAM number matrix is used]:number:'
+        '--lep[Offset value at local pairwise alignment]:number:'
+        '--lexp[Gap extension penalty at local pairwise alignment]:number:'
+        '--LEXP[Gap extension penalty to skip the alignment]:number:'
+        '--lop[Gap opening penalty at local pairwise alignment]:number:'
+        '--LOP[Gap opening penalty to skip the alignment]:number:'
+        '--maxiterate[number cycles of iterative refinement are performed]:number:'
+        '--memsave[Use the Myers-Miller (1988) algorithm]'
+        '--nofft[Do not use FFT approximation in group-to-group alignment]'
+        '--noscore[Alignment score is not checked in the iterative refinement stage]'
+        '--nuc[Assume the sequences are nucleotide]'
+        '--op[Gap opening penalty at group-to-group alignment]:number:'
+        '--partsize[The number of partitions in the PartTree algorithm]:number:'
+        '--parttree[Use a fast tree-building method with the 6mer distance]'
+        '--quiet[Do not report progress]'
+        '--reorder[Output order: aligned]'
+        '--retree[Guide tree is built number times in the progressive stage]:number:'
+        '--seed[Seed alignments given in alignment_n are aligned with sequences in input]:file:_files'
+        '--tm[Transmembrane PAM number matrix is used]:number:'
+        '--treeout[Guide tree is output to the input.tree file]'
+        '--weighti[Weighting factor for the consistency term]:number:'
+        '*:file:_files'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_mafft
