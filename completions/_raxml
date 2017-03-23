@@ -1,0 +1,147 @@
+#compdef raxml raxmlHPC -P raxmlHPC-*
+
+
+_raxml() {
+	local ret=1
+	local -a args
+	args+=(
+		'-a+[Specify a column weight file]:file:_files'
+		'-A+[Specify one of the secondary structure substitution models]:model:(S6A S6B S6C S6D S6E S7A S7B S7C S7D S7E S7F S16 S16A S16B)'
+		'-b+[Specify an integer number (random seed) and turn on bootstrapping]:int:'
+		'-B+[cutoff threshold for the MR-based bootstopping criteria]:float:'
+		'-c+[Specify number of distinct rate catgories]:int:'
+		'-C[Enable verbose output for the "-L" and "-f i" options]'
+		'-d[start ML optimization from random starting tree]'
+		'-D[ML search convergence criterion]'
+		'-e+[Set model optimization precision in log likelihood units]:float:'
+		'-E+[Specify an file that contains a specification of alignment positions you wish to exclude]:file:_files'
+		'-f+[Select algorithm]:algorithm:((
+			a\:rapid\ Bootstrap\ analysis\ and\ search\ for\ best-scoring\ ML\ tree\ in\ one\ program\ run
+			A\:compute\ marginal\ ancestral\ states\ on\ a\ ROOTED\ reference\ tree
+			b\:draw\ bipartition\ information\ on\ a\ tree\ based\ on\ multiple\ trees
+			B\:optimize\ br-len\ scaler\ and\ other\ model\ parameters
+			c\:check\ if\ the\ alignment\ can\ be\ properly\ read\ by\ RAxML
+			C\:ancestral\ sequence\ test\ for\ Jiajie
+			d\:new\ rapid\ hill-climbing
+			D\:rapid\ hill-climbing\ with\ RELL\ bootstraps
+			e\:optimize\ model+branch\ lengths\ under\ GAMMA/GAMMAI\ only
+			E\:execute\ very\ fast\ experimental\ tree\ search
+			F\:execute\ fast\ experimental\ tree\ search
+			g\:compute\ per\ site\ log\ Likelihoods\ with\ model\ estimate\ from\ first\ tree
+			G\:compute\ per\ site\ log\ Likelihoods\ with\ model\ reestimated\ for\ each\ tree
+			h\:compute\ log\ likelihood\ test\ (SH-test)\ between\ trees
+			H\:compute\ log\ likelihood\ test\ (SH-test)\ between\ trees\ with\ model\ reestimated\ for\ each\ tree
+			i\:calculate\ IC\ and\ TC\ scores
+			I\:a\ simple\ tree\ rooting\ algorithm\ for\ unrooted\ trees
+			j\:generate\ a\ bunch\ of\ bootstrapped\ alignment\ files
+			J\:Compute\ SH-like\ support\ values
+			k\:Fix\ long\ branch\ lengths\ in\ partitioned\ data\ sets
+			m\:compare\ bipartitions\ between\ two\ bunches\ of\ trees
+			n\:compute\ the\ log\ likelihood\ score\ of\ all\ trees
+			N\:compute\ the\ log\ likelihood\ score\ of\ all\ trees\ with\ model\ reestimated\ for\ each\ tree
+			o\:old\ and\ slower\ rapid\ hill-climbing\ without\ heuristic\ cutoff
+			p\:perform\ pure\ stepwise\ MP\ addition
+			P\:perform\ a\ phylogenetic\ placement
+			q\:fest\ quartet\ calculator
+			r\:compute\ pairwise\ Robinson-Foulds\ (RF)\ distances
+			R\:compute\ all\ pairwise\ Robinson-Foulds\ (RF)\ distances
+			s\:split\ up\ a\ multi-gene\ partitioned\ alignment
+			S\:compute\ site-specific\ placement\ bias
+			t\:do\ randomized\ tree\ searches
+			T\:do\ final\ thorough\ optimization\ of\ ML\ tree
+			u\:execute\ morphological\ weight\ calibration
+			v\:classify\ a\ bunch\ of\ environmental\ sequences
+			V\:classify\ a\ bunch\ of\ environmental\ sequences\ \(experimental\)
+			w\:compute\ ELW\ test
+			W\:compute\ ELW\ test\ with\ model\ re-estimated\ for\ each\ tree
+			x\:compute\ pair-wise\ ML\ distances
+			y\:classify\ a\ bunch\ of\ environmental\ sequences\ using\ parsimony
+		))'
+		'-F[enable ML tree searches under CAT model]'
+		'-g+[specify the file name of a multifurcating constraint tree]:file:_files'
+		'-G+[enable the ML-based evolutionary placement algorithm heuristics]:float:'
+		'(- *)-h[display help message]'
+		'-H[Disable pattern compression]'
+		'-i+[Initial rearrangement setting]: :'
+		'-I+[a posteriori bootstopping analysis]:algorithm:((
+			autoFC\:frequency-based\ criterion
+			autoMR\:majority-rule\ consensus\ tree\ criterion
+			autoMRE\:extended\ majority-rule\ consensus\ tree\ criterion
+			autoMRE_IGN\:metrics\ similar\ to\ MRE,\ but\ include\ bipartitions\ under\ the\ threshold
+		))'
+		'-j+[Specifies intermediate tree files]:file:_files'
+		'-J+[Tree computation option]:algorithm:((
+			MR\:majority\ rule\ consensus\ tree
+			MRE\:extended\ majority\ rule\ consensus\ tree
+			STRICT\:strict\ consensus\ tree
+			STRICT_DROP\:identifies\ dropsets
+			MR_DROP\:identifies\ dropsets
+			T_\<PERCENT\>\:specify\ percent
+		))'
+		'-k[Printed bootstrapped trees with branch lengths]'
+		'-K+[Specify a multi-state substitution models]:model:(ORDERED MK GTR)'
+		'-L+[Compute consensus trees labelled by IC supports]:strategy:(MR MRE T_NUM)'
+		'-m+[Specify substitution model]:model:(
+			BINCAT BINCATX BINCATI BINCATIX ASC_BINCAT ASC_BINCATX
+			BINGAMMA BINGAMMAX ASC_BINGAMMA ASC_BINGAMMAX BINGAMMAI BINGAMMAIX
+			GTRCAT GTRCATX GTRCATI GTRCATIX ASC_GTRCAT ASC_GTRCATX
+			GTRGAMMA GTRGAMMAX ASC_GTRGAMMA ASC_GTRGAMMAX
+			GTRGAMMAI GTRGAMMAIX
+			MULTICAT MULTICATX MULTICATI MULTICATIX
+			ASC_MULTICAT ASC_MULTICATX MULTIGAMMA MULTIGAMMAX
+			ASC_MULTIGAMMA ASC_MULTIGAMMAX MULTIGAMMAI MULTIGAMMAIX
+			PROTCAT
+			PROTCATI
+			ASC_PROTCAT
+			PROTGAMMA
+			ASC_PROTGAMMA
+			PROTGAMMAI)' # TODO: if anyone really cares, this can be heavily improved
+		'-M[Switch on estimation of individual per-partition branch lengths]'
+		'-n+[Specifies the name of the output file]:file:_files'
+		'-o+[Specify the name of a outgroup]:str:'
+		'-O[Disable check for completely undetermined sequence in alignment]'
+		'-p+[Specify a random number seed for the parsimony inferences]:int:'
+		'-P+[Specify a user-defined AA substitution model]:file:_files'
+		'-q+[Specify the assignment of models to alignment partitions]:file:_files'
+		'-r+[Specify the file name of a binary constraint tree]:file:_files'
+		'-R+[Specify the file name of a binary model parameter]:file:_files'
+		'-s+[Specify the alignment data file in PHYLIP format]:file:_files'
+		'-S+[Specify the name of a secondary structure file]:file:_files'
+		'-t+[Specify a user starting tree file in Newick format]:file:_files'
+		# TODO: PTHREADS VERSION ONLY
+		'-T+[Specify the number of threads you want to run]:int:'
+		'-u[use the median for the discrete approximation of the GAMMA model of rate heterogeneity]'
+		'-U[Try to save memory by using SEV-based implementation for gap columns ]'
+		'-v[Display version information]'
+		'-V[Disable rate heterogeneity among sites model]'
+		'-w+[FULL path to the directory into which RAxML shall write its output files]:dir:_files -/'
+		'-W+[Sliding window size]:int:'
+		'-x+[Seed for rapid bootstrapping]:int:'
+		'-X[Superficial version of -y]'
+		'-y[Compute only a parsimony starting tree with RAxML]'
+		'-Y[File name defining four groups from which to draw quartets]:file:_files'
+		'-z+[file containing multiple trees that shall be used to draw bipartition values]:file:_files'
+		{-\#,-N}'+[Specify the number of alternative runs on distinct starting trees]:int:'
+		'--mesquite[Print output files that can be parsed by Mesquite]'
+		'--silent[Disables printout of warnings]'
+		'--no-seq-check[Disables checking the input MSA for identical sequences and undetermined sites]'
+		'--no-bfgs[Disables automatic usage of BFGS method]'
+		'--asc-corr=[Specify the type of ascertainment bias correction you wish to use]:type:(lewis felsenstein stamatakis)'
+		'--flag-check[only check if all command line flags specifed are available and then exit]'
+		'--auto-prot=[Change the criterion for automatic protien model selection]:criterion:(ml bic aic aicc)'
+		'--epa-keep-placements=[Specify the number of potential placements you want to keep]:number:'
+		'--epa-prob-threshold=[Specify a percent threshold for including potential placements]:number:'
+		'--epa-accumulated-threshold=[Specify an accumulated likelihood weight threshold]:number:'
+		'(--JC69 --K80 --HKY85)--JC69[All DNA patitions will evolve under Jukes-Cantor model]'
+		'(--JC69 --K80 --HKY85)--K80[All DNA patitions will evolve under K80 model]'
+		'(--JC69 --K80 --HKY85)--HKY85[All DNA patitions will evolve under HKY85 model]'
+		'--asc-miss=[Specify the fraction of missing data]:number:'
+		'*:file:_files'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_raxml
+
+
