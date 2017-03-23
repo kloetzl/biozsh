@@ -1,0 +1,73 @@
+#compdef muscle
+
+_muscle() {
+	local ret=1
+	local -a args
+	args+=(
+		'(- *)-h[Display help and exit]'
+		'(-html -msf -clw -clwstrict)-clw[Write output in CLUSTALW format (default FASTA)]'
+		'(-html -msf -clw -clwstrict)-clwstrict[As -clw, with '\''CLUSTAL W (1.81)'\'' header]'
+		'(-html -msf -clw -clwstrict)-html[Write output in HTML format (default FASTA)]'
+		'(-html -msf -clw -clwstrict)-msf[Write output in GCG MSF format (default FASTA)]'
+	 
+		'-in[Input file in FASTA format (default stdin)]:file:_files'
+		'-log[Log to file (overwrite)]:file:_files'
+		'-loga[Log to file (append)]:file:_files'
+		'-maxhours[Maximum time to iterate in hours (default no limit)]:hours:'
+		'-maxiters[Maximum number of iterations (default 16)]:integer:'
+		'-out[Output alignment in FASTA format (default stdout)]:file:_files'
+		'-quiet[Do not write progress messages to stderr]'
+		'-version[Display version information and exit]'
+
+		'-anchorspacing[Minimum spacing between anchor columns]:integer:'
+		'-center[Center parameter]:neg float:'
+		{-cluster1,-cluster2}'[Clustering method]:method:(upgma upgmb neighborjoining)'
+		'-diaglength[Minimum length of diagonal]:int:'
+		'-diagmargin[Discard this many positions ad ends of each diagonal]:int:'
+		'-distance1[Distance measure for iteration 1]: :(kmer6_6 kmer20_3 kmer20_4 kbit20_3 kmer4_6)'
+		'-distance2[Distance measure for iteration 2 onwards]: :(kmer6_6 kmer20_3 kmer20_4 kbit20_3 pctid_kimura pctid_log)'
+		'-gapopen[The gap opening score]:neg float:'
+		'-hydro[Window size for determining whether a regions is hydrophobic]:int:'
+		'-hydrofactor[Multiplier in hydrophobic regions]:float:'
+		'-maxdiagbreak[Maximum distance between two diagonals that allows them to merge into one diagonal]:int:'
+		'-maxtrees[Maximum number of trees to build in iteration 2]:int:'
+		'-minbestcolscore[Minimum score a column must have to be an anchor]:float:'
+		'-minsmoothscore[Minimum smoothed score a column must have to be an anchor]:float:'
+		'-objscore[Objective score used by tree dependent refinement]:score:((
+			sp\:sum\-of\-pairs\ score
+			spf\:sum\-of\-pairs\ score\ \(dimer\ approximation\)
+			spm\:sp\ for\ \<\ 100\ seqs,\ otherwise\ spf
+			dp\:dynamic\ programming\ score
+			ps\:average\ profile\-sequence\ score
+			xp\:cross\ profile\ score
+		))'
+		{-root1,-root2}'[Method used to root tree]:method:(pseudo midlongestspan minavgleafdist)'
+		'-seqtype[Sequence type]:type:(protein nucleo auto)'
+		'-smoothscoreceil[Maximum value of column score for smoothing purposes]:float:'
+		'-smoothwindow[Window used for anchor column smoothing]:int:'
+		'-SUEFF[Constant used in UPGMB clustering]:float:'
+		'-tree1[Save tree produced in first iteration to file]:file:_files'
+		'-tree2[Save tree produced in second iteration to file]:file:_files'
+		'-weight1[Sequence wighting scheme]:scheme:(none henikoff henikoffpb gsc clustalw threeway)'
+		'(-noanchors)-anchors[Use anchor optimization]'
+		'(  -anchors)-noanchors[Don not use anchor optimization]'
+		'(-nocore)-core[Do not catch exceptions]'
+		'(  -core)-nocore[Catch exceptions]'
+		'(-group)-nogroup[Do not group similar sequences in the output]'
+		'(-sv -sp -nole)-le[Use log-expectation profile score]'
+		'(-le)-nole[Do not use log-expectation profile score]'
+		'-refine[Skip first two iterations]'
+		'(-sv -le)-sp[Use sum-of-pairs protein profile score (PAM200)]'
+		'-spn[Use sum-of-pairs nucleotide profile score (BLASTZ parameters)]'
+		'-stable[Preserve input order of sequences in output file]'
+		'(-sp -le)-sv[Use sum-of-pairs profile score (VTML240)]'
+		'(-termgapsfull -termgapshalf -termgapshalflonger)-termgapsfull[Terminal gaps penalized with full penalty]'
+		'(-termgapsfull -termgapshalf -termgapshalflonger)-termgapshalf[Terminal gaps penalized with half penalty]'
+		'(-termgapsfull -termgapshalf -termgapshalflonger)-termgapshalflonger[Half penalty, if gap relative to longer sequence]'
+		'-verbose[Write parameter settings and progress messages to log file]'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_muscle
