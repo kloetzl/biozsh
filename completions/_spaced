@@ -1,0 +1,27 @@
+#compdef spaced
+
+_spaced() {
+	local ret=1
+	local -a args
+	args+=(
+		'(- *)-h[print help and exit]'
+		'(-h -k -l -n)-f[use patterns in <file> instead of random patterns]:file:_files'
+		'(-h)-o[output file name (default: DMat)]:file:_files'
+		'(-h -f)-k[pattern weight (default 10)]:integer:'
+		'(-h -f)-l[pattern do-not-care positions (default 15)]:integer:'
+		'(-h -f)-n[number of patterns (default: 30)]:integer:'
+		'(-h)-t[number of threads (default: all available threads)]:integer:'
+		'(-h)-d[change distance type]:type:((
+			EU\:Euclidean\ distance
+			JS\:Jensen\-Shannon
+			EV\:Evolutionary\ distance
+			EVR
+		))'
+		'(-h)-v[variable pattern lengths]'
+		'*::file:_files'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_spaced
