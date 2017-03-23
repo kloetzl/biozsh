@@ -138,7 +138,7 @@ _raxml() {
 		'--asc-miss=[Specify the fraction of missing data]:number:'
 		'*:file:_files'
 	)
-	_arguments $args[@] && ret=0
+	_arguments -w -s -S $args[@] && ret=0
 	return ret
 }
 
