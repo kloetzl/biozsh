@@ -1,0 +1,43 @@
+#compdef roary
+
+_roary(){
+	local ret=1
+	local -a args
+
+	if (( words[(I)-e] )); then
+		args+=('-n[fast core gene alignment with MAFFT]')
+	fi
+
+	if (( words[(I)-qc] )); then
+		args+=('-k[path to Kraken database for QC]:file:_files')
+	fi
+
+	args+=(
+		'(- *)-a[check dependencies and exit]'
+		'-b[blastp executable]:file:_files'
+		'-c[mcl executable]:file:_files'
+		'-cd[percentage of isolates a gene must be in to be core]:float:'
+		'-d[mcxdeblast executable]:file:_files'
+		'-g[maximum number of clusters]:int:'
+		'(- *)-h[help message]'
+		'-i[minimum percentage identity for blastp]:number:'
+		'(-y)-e[create a multiFASTA alignment of core genes using PRANK]'
+		'-f[output directory]:dir:_files -/'
+		'-m[makeblastdb executable]:file:_files'
+		'-o[clusters output filename]:file:_files'
+		'-p[number of threads]:int:'
+		'-qc[generate QC report with Kraken]'
+		'-r[create R plots, requires R and ggplot2]'
+		'-s[dont split paralogs]'
+		'-t[translation table]:int:'
+		'-z[dont delete intermediate files]'
+		'-v[verbose output to STDOUT]'
+		'(- *)-w[print version and exit]'
+		'-y[add gene inference information to spreadsheet]'
+		'*::file:_files -g \*.gff'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_roary
