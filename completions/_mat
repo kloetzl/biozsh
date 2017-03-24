@@ -1,58 +1,66 @@
 #compdef mat
 
+# fails if defined as local
+ignore="-h --help"
+
 _mat-compare() {
-	local args
+	local -a args
 	args+=(
-		'(-f --full)'{-f,--full}'[output full distance matrix]'
-		'--help[print help]'
+		"1: :"
+		"($ignore -f --full)"{-f,--full}'[output full distance matrix]'
+		'(- *)--help[print help]'
 	)
 	_arguments -w -s -S $args[@] '*:file:_files'
 }
 
 _mat-format() {
-	local args
+	local -a args
 	args+=(
-		'(-f -v --fix --validate)'{-f,--fix}'[fix small errors]'
-		'(--format)--format=[the format string]'
-		'(--precision)--precision=[precision to use in comparisons]:float'
-		'(--separator)--separator=[the cell separator]:char'
-		'(--sort)--sort[sort by name]'
-		'(-v --validate)'{-v,--validate}'[validate for correctness]'
-		'(-h --help)'{-h,--help}'[print help]'
+		"1: :"
+		"($ignore -f --fix)"{-f,--fix}'[fix small errors]'
+		"($ignore)--format=[the format string]:str:"
+		"($ignore)--precision=[precision to use in comparisons]:float:"
+		"($ignore)--separator=[the cell separator]:char:"
+		"($ignore)--sort[sort by name]"
+		"($ignore -v --validate -f --fix)"{-v,--validate}'[validate for correctness]'
+		'(- *)'{-h,--help}'[print help]'
 	)
 	_arguments -w -s -S $args[@] '*:file:_files'
 }
 
 _mat-grep() {
-	local args
+	local -a args
 	# The second argument is the pattern, do not autocomplete. But *do* try
 	# to complete, if it could be an argument.
 	args+=(
+		"1: :"
 		'2: :_guard "^-" pattern'
-		'(-v --invert-match)'{-v,--invert-match}'[select non-matching names]'
-		'(-h --help)'{-h,--help}'[print help]'
+		"($ignore -v --invert-match)"{-v,--invert-match}'[select non-matching names]'
+		'(- *)'{-h,--help}'[print help]'
 	)
 	_arguments -w -s -S $args[@] '*:file:_files'
 }
 
 _mat-nj() {
-	local args
+	local -a args
 	args+=(
-		'(-h --help)'{-h,--help}'[print help]'
+		"1: :"
+		'(- *)'{-h,--help}'[print help]'
 	)
 	_arguments -w -s -S $args[@] '*:file:_files'
 }
 
 _mat() {
 	local ret=1
+	local -a args
 	if ((CURRENT == 2)); then
 		# complete args and commands
 		args+=(
-			'(--version)--version[print version information]'
-			'(--help)--help[print help]'
+			'(- *)--version[print version information]'
+			'(- *)--help[print help]'
 		)
 
-		_arguments -w -s -S -S $args[@]
+		_arguments -w -s -S $args[@]
 		_describe 'mat command' '(
 			compare:compute\ the\ distance\ between\ two\ matrices
 			format:format\ distance\ matrix
@@ -60,28 +68,14 @@ _mat() {
 			nj:convert\ to\ a\ tree\ by\ neighbor\ joining
 		)'
 		ret=0
-		return ret
 	else
 		# delegate to sub commands
-		local subcmd=$words[2]
-		case $subcmd in
-			compare)
-				_mat-compare && ret=0
-				;;
-			format)
-				_mat-format && ret=0
-				;;
-			grep)
-				_mat-grep && ret=0
-				;;
-			nj)
-				_mat-nj && ret=0
-				;;
-		esac
-		return ret
+		local subcmd=_mat-$words[2]
+		if ! _call_function ret $subcmd ; then
+			_message "unknown sub-command: $words[1]"
+		fi
 	fi
-
-	local args
+	return ret
 }
 
 _mat
