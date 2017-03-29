@@ -1,0 +1,428 @@
+#compdef bedtools annotateBed bamToBed bamToFastq bed12ToBed6 bedpeToBam bedToBam closestBed complementBed coverageBed fisher flankBed genomeCoverageBed fastaFromBed bedToIgv
+
+# all aliases shoudl also be in the compdef line above
+local -A aliases
+aliases[annotateBed]="annotate"
+aliases[bamToBed]="bamtobed"
+aliases[bamToFastq]="bamtofastq"
+aliases[bed12ToBed6]="bed12tobed6"
+aliases[bedpeToBam]="bedpetobam"
+aliases[bedToBam]="bedtobam"
+aliases[closestBed]="closest"
+aliases[complementBed]="complement"
+aliases[coverageBed]="coverage"
+aliases[fisher]="fisher"
+aliases[flankBed]="flank"
+aliases[genomeCoverageBed]="genomecov"
+aliases[fastaFromBed]="getfasta"
+aliases[bedToIgv]="igv"
+
+_bedtools-annotate() {
+	echo "annotate $#" >> deleteme
+	local ret=1
+	local -a args
+	if [[ $service == bedtools ]]; then
+		args+=('1:command:')
+	fi
+	args+=(
+		'-names[A list of names (one / file) to describe each file in -i]: :'
+		'(-both)-counts[Report the count of features in each file that overlap -i]'
+		'(-counts)-both[Report the counts followed by the % coverage]'
+		'(-S)-s[Require same strandedness]'
+		'(-s)-S[Require different strandedness]'
+		'(-names -counts -both -s -S)-i[intervals]:file:_files -g \*.\(bed\|gff\|vcf\)'
+	)
+	if (( words[(I)-i] )); then
+		args+=('(-)-files[input files]:*:file:_files')
+	fi
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_bedtools-bamtobed() {
+	integer ret=0
+	local -a args
+	if [[ $service == bedtools ]]; then
+		args+=('1:command:')
+	fi
+	args+=(
+		'(-split)-bed12[Write "blocked" BED format (aka "BED12")]'
+		'(-tag)-bedpe[Write BEDPE format]'		
+		'-cigar[Add the CIGAR string to the BED entry as a 7th column]'
+		'-color[An R,G,B string for the color used with BED12 format]:color string:'
+		'-ed[Use BAM edit distance (NM tag) for BED score]'
+		'-i[Reads]:bam file:_files -g \*.bam'
+		'-split[Report "split" BAM alignments as separate BED entries]'
+		'(-split)-splitD[Split alignments based on N and D CIGAR operators]'
+		'-tag[Use other NUMERIC BAM alignment tag for BED score]'
+	)
+	if (( words[(I)-bedpe] )); then
+		args+=('-mate1[always report mate one as the first BEDPE "block"]')
+	fi
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_bedtools-bamtofastq() {
+	integer ret=0
+	local -a args
+	args+=(
+		"$extra_arg"
+		'-i[Reads]:bam file:_files -g \*.bam'
+		'-fq[Output FASTQ]:fastq file:_files -g \*.\(fq\|fastq\)'
+		'-fq2[FASTQ for second end]:fastq file:_files -g \*.\(fq\|fastq\)'
+		'-tags[Create FASTQ based on the mate info]'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_bedtools-bed12tobed6() {
+	integer ret=0
+	local -a args
+	args+=(
+		"$extra_arg"
+		'-i[Reads]:bam file:_files'
+		'-n[Force the score to be the (1-based) block number]'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_bedtools-bedpetobam() {
+	integer ret=0
+	local -a args
+	args+=(
+		"$extra_arg"
+		'-i[feature records]:file:_files -g \*.\(bed\|gff\|vcf\)'
+		'-g[genome]:str:'
+		'-mapq[Set the mapping quality for the BAM records]:int:'
+		'-ubam[Wrinte uncompressed BAM output]'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_bedtools-bedtobam() {
+	integer ret=0
+	local -a args
+	args+=(
+		"$extra_arg"
+		'-i[feature records]:file:_files -g \*.\(bed\|gff\|vcf\)'
+		'-g[genome]:str:'
+		'-bed12[The BED file is in BED12 format]'
+		'-mapq[Set the mapping quality for the BAM records]:int:'
+		'-ubam[Wrinte uncompressed BAM output]'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_bedtools-closest() {
+	integer ret=0
+	local -a args
+	args+=(
+		"$extra_arg"
+		'-a[features to search for]:file:_files -g \*.\(bed\|gff\|vcf\)'
+		'-b[feature records]:file:_files -g \*.\(bed\|gff\|vcf\)'
+		'(-D)-d[report closest feature distance as extra column]'
+		'(-d)-D[report closest feature distance, with negative values for upstream]:orientation:((
+			ref\:Report\ distance\ with\ respect\ to\ the\ reference\ genome
+			a\:Report\ distance\ with\ respect\ to\ A
+			b\:Report\ distance\ with\ respect\ to\ B
+		))'
+		'-io[Ignore features in B that overlap A]'
+		'-iu[Ignore features in B that are upstream of features in A]'
+		'-id[Ignore features in B that are downstream of features in A]'
+		'-fu[Choose first from features in B that are upstream of features in A]'
+		'-fd[Choose first from features in B that are downstream of features in A]'
+		'-t[How ties for closest feature are handled]:strategy:((
+			all\:Report\ all\ ties
+			first\:Report\ the\ first\ tie\ that\ occurred\ in\ the\ B\ file
+			last\:Report\ the\ last\ tie\ that\ occurred\ in\ the\ B\ file
+		))'
+		'-mdb[How multiple databases are resolved]:strategy:((
+			each\:Report\ closest\ records\ for\ each\ database
+			all\:Report\ closest\ records\ among\ all\ databases
+		))'
+		'-k[Report the k closest hits]:int:'
+		'-N[Require that the query and the closest hit have different names]'
+		'(-S)-s[Require same strandedness]'
+		'(-s)-S[Require different strandedness]'
+		'-f[Minimum overlap required as a fraction of A]:float:'
+		'-F[Minimum overlap required as a fraction of B]:float:'
+		'(-e)-r[Require that the fraction overlap be reciprocal for A AND B]'
+		'(-r)-e[Require that the minimum fraction be satisfied for A OR B]'
+		'-split[Treat "split" BAM or BED12 entries as distinct BED intervals]'
+		'-g[Genome file to enforce consistent chromosome sort order]:file:_files'
+		'-nonamecheck[do not throw an error if the file has different naming conventions]'
+		'(-names -filenames -sortout)-names[When using multiple databases, provide an alias for each that will appear instead of a fileId when also printing the DB record]'
+		'(-names -filenames -sortout)-filenames[When using multiple databases, show each complete filename instead of a fileId when also printing the DB record.]'
+		'(-names -filenames -sortout)-sortout[When using multiple databases, sort the output DB hits for each record]'
+		'-bed[If using BAM input, write output as BED]'
+		'-header[Print the header from the A file prior to results]'
+		'(-iobuf)-nobuf[Disable buffered output]'
+		'(-nobuf)-iobuf[Specify amount of memory to use for input buffer]:size:'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_bedtools-cluster() {
+	integer ret=0
+	local -a args
+	args+=(
+		"$extra_arg"
+		'-i[feature records]:file:_files -g \*.\(bed\|gff\|vcf\)'
+		'-s[Force strandedness]'
+		'-d[Maximum merging distance]:int:'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_bedtools-complement() {
+	integer ret=0
+	local -a args
+	args+=(
+		"$extra_arg"
+		'-i[feature records]:file:_files -g \*.\(bed\|gff\|vcf\)'
+		'-g[genome]:file:_files'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_bedtools-coverage() {
+	integer ret=0
+	local -a args
+	args+=(
+		"$extra_arg"
+		'-hist[report histogram]'
+		'-a[features to search for]:file:_files -g \*.\(bed\|gff\|vcf\)'
+		'-b[feature records]:file:_files -g \*.\(bed\|gff\|vcf\)'
+		'-counts[Only report the count of overlaps]'
+		'-mean[Report the mean depth of all positions in each A feature]'
+		'-d[report closest feature distance as extra column]'
+		'(-S)-s[Require same strandedness]'
+		'(-s)-S[Require different strandedness]'
+		'-f[Minimum overlap required as a fraction of A]:float:'
+		'-F[Minimum overlap required as a fraction of B]:float:'
+		'(-e)-r[Require that the fraction overlap be reciprocal for A AND B]'
+		'(-r)-e[Require that the minimum fraction be satisfied for A OR B]'
+		'-split[Treat "split" BAM or BED12 entries as distinct BED intervals]'
+		'-g[Genome file to enforce consistent chromosome sort order]:file:_files'
+		'-nonamecheck[do not throw an error if the file has different naming conventions]'
+		'(-names -filenames -sortout)-names[When using multiple databases, provide an alias for each that will appear instead of a fileId when also printing the DB record]'
+		'(-names -filenames -sortout)-filenames[When using multiple databases, show each complete filename instead of a fileId when also printing the DB record.]'
+		'(-names -filenames -sortout)-sortout[When using multiple databases, sort the output DB hits for each record]'
+		'-bed[If using BAM input, write output as BED]'
+		'-header[Print the header from the A file prior to results]'
+		'(-iobuf)-nobuf[Disable buffered output]'
+		'(-nobuf)-iobuf[Specify amount of memory to use for input buffer]:size:'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_bedtools-expand() {
+	integer ret=0
+	local -a args
+	args+=(
+		"$extra_arg"
+		'-i[Input file]:file:_files'
+		'-c[Specify the column (1-based) that should be summarized]:int:'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_bedtools-fisher() {
+	integer ret=0
+	local -a args
+	args+=(
+		"$extra_arg"
+		'-a[features to search for]:file:_files -g \*.\(bed\|gff\|vcf\)'
+		'-b[feature records]:file:_files -g \*.\(bed\|gff\|vcf\)'
+		'-m[Merge overlapping intervals]'
+		'(-S)-s[Require same strandedness]'
+		'(-s)-S[Require different strandedness]'
+		'-f[Minimum overlap required as a fraction of A]:float:'
+		'-F[Minimum overlap required as a fraction of B]:float:'
+		'(-e)-r[Require that the fraction overlap be reciprocal for A AND B]'
+		'(-r)-e[Require that the minimum fraction be satisfied for A OR B]'
+		'-split[Treat "split" BAM or BED12 entries as distinct BED intervals]'
+		'-g[Genome file to enforce consistent chromosome sort order]:file:_files'
+		'-nonamecheck[do not throw an error if the file has different naming conventions]'
+		'-bed[If using BAM input, write output as BED]'
+		'-header[Print the header from the A file prior to results]'
+		'(-iobuf)-nobuf[Disable buffered output]'
+		'(-nobuf)-iobuf[Specify amount of memory to use for input buffer]:size:'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_bedtools-flank() {
+	integer ret=0
+	local -a args
+	args+=(
+		"$extra_arg"
+		'-i[features records]:file:_files -g \*.\(bed\|gff\|vcf\)'
+		'-header[Print the header from the A file prior to results]'
+		'-b[Create flanking interval(s) using -b base pairs in each direction]:int:'
+		'(-b)-l[Number of base pairs that a flank should start from original start]:int:'
+		'(-b)-r[Number of base pairs that a flank should end from original end]:int:'
+		'(-b)-s[Define -l and -r based on strand]'
+		'(-b)-pct[Define -l and -r as a fraction of the features length]'
+		'-g[genome]:file:_files'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+
+_bedtools-genomecov() {
+	integer ret=0
+	local -a args
+	args+=(
+		"$extra_arg"
+		'-i[features records]:file:_files -g \*.\(bed\|gff\|vcf\|bam\)'
+		'-g[genome]:file:_files'
+		'-ibam[The input file is in BAM format]'
+		'(-max -dz)-d[Report the depth at each genome position (with one-based coordinates)]'
+		'(-max -d)-dz[Report the depth at each genome position (with zero-based coordinates)]'
+		'(-dz -d)-max[Combine all positions with a depth >= max into a single bin]'
+		'(-bga)-bg[Report depth in BedGraph format]'
+		'(-bg)-bga[Report depth in BedGraph format including zero-coverage regions]'
+		'-split[Treat "split" BAM or BED12 entries as distinct BED intervals]'
+		'-strand[Calculate coverage of intervals from a specific strand]:string:(\- \+)'
+		'(-3)-5[Calculate coverage of 5" positions]'
+		'(-5)-3[Calculate coverage of 3" positions]'
+		'-scale[Scale the coverage by a constant factor]:float:'
+		'-trackline[Adds a UCSC/Genome-Browser track line definition in the first line of the output]'
+		'-trackopts[Writes additional track line definition parameters in the first line]:text:'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_bedtools-getfasta() {
+	integer ret=0
+	local -a args
+	args+=(
+		"$extra_arg"
+		'-bed[features records]:file:_files -g \*.\(bed\|gff\|vcf\)'
+		'-split[Treat "split" BAM or BED12 entries as distinct BED intervals]'
+		'-fi[input fasta file]:file:_files'
+		'-fo[ouput file]:file:_files'
+		'-name[Use the name field for the FASTA header]:string:'
+		'-tab[Write output in TAB delimited format]'
+		'-s[Force strandedness]'
+		'-fullHeader[Use full fasta header]'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_bedtools-igv() {
+	integer ret=0
+	local -a args
+	args+=(
+		"$extra_arg"
+		'-i[input file]:file:_files -g \*.\(bed\|gff\|vcf\)'
+		'-path[The full path to which the IGV snapshots should be written]:directory:_files -/'
+		'-sess[The full path to an existing IGV session file to be loaded prior to taking snapshots]:file:_files'
+		'-sort[The type of BAM sorting you would like to apply to each image]:sorting:(base position strand quality sample readGroup)'
+		'-clps[Collapse the aligned reads prior to taking a snapshot]'
+		'-name[Use the "name" field (column 4) for each image filename]'
+		'-slop[Number of flanking base pairs on the left and right of the image]:int:'
+		'-img[The type of image to be created]:type:(png eps svg)'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+# More to come
+
+_bedtools-subcommand() {
+	local ret=1
+
+	local subcmd=_bedtools-$1
+	if ! _call_function ret $subcmd; then
+		_message "unknown subcomand: $subcmd"
+	fi
+	return ret
+}
+
+_bedtools-main() {
+	local ret=1
+	if (( CURRENT == 2)); then
+		local -a args
+		args+=(
+			'1:command:((
+				annotate\:Annotate\ coverage\ of\ features\ from\ multiple\ files
+				bamtobed\:Convert\ BAM\ alignments\ to\ BED\ and\ other\ formats
+				bamtofastq\:Convert\ BAM\ records\ to\ FASTQ\ records
+				bed12tobed6\:Breaks\ BED12\ intervals\ into\ discrete\ BED6\ intervals
+				bedpetobam\:Convert\ BEDPE\ intervals\ to\ BAM\ records
+				bedtobam\:Convert\ intervals\ to\ BAM\ records
+				closest\:Find\ the\ closest,\ potentially\ non-overlapping\ interval
+				cluster\:Cluster\ \(but\ do\ not\ merge\)\ overlapping\/nearby\ intervals
+				complement\:Extract\ intervals\ not\ represented\ by\ an\ interval\ file
+				coverage\:Compute\ the\ coverage\ over\ defined\ intervals
+				expand\:Replicate\ lines\ based\ on\ lists\ of\ values\ in\ columns
+				fisher\:Calculate\ Fisher\ statistic\ b/w\ two\ feature\ files
+				flank\:Create\ new\ intervals\ from\ the\ flanks\ of\ existing\ intervals
+				genomecov\:Compute\ the\ coverage\ over\ an\ entire\ genome
+				getfasta\:Use\ intervals\ to\ extract\ sequences\ from\ a\ FASTA\ file
+				groupby\:Group\ by\ common\ cols.\ and\ summarize\ other\ cols
+				igv\:Create\ an\ IGV\ snapshot\ batch\ script
+				intersect\:Find\ overlapping\ intervals\ in\ various\ ways
+				jaccard\:Calculate\ the\ Jaccard\ statistic\ b/w\ two\ sets\ of\ intervals
+				links\:Create\ a\ HTML\ page\ of\ links\ to\ UCSC\ locations
+				makewindows\:Make\ interval\ windows\ across\ a\ genome
+				map\:Apply\ a\ function\ to\ a\ column\ for\ each\ overlapping\ interval
+				maskfasta\:Use\ intervals\ to\ mask\ sequences\ from\ a\ FASTA\ file
+				merge\:Combine\ overlapping/nearby\ intervals\ into\ a\ single\ interval
+				multicov\:Counts\ coverage\ from\ multiple\ BAMs\ at\ specific\ intervals
+				multiinter\:Identifies\ common\ intervals\ among\ multiple\ interval\ files
+				nuc\:Profile\ the\ nucleotide\ content\ of\ intervals\ in\ a\ FASTA\ file
+				overlap\:Computes\ the\ amount\ of\ overlap\ from\ two\ intervals
+				pairtobed\:Find\ pairs\ that\ overlap\ intervals\ in\ various\ ways
+				pairtopair\:Find\ pairs\ that\ overlap\ other\ pairs\ in\ various\ ways
+				random\:Generate\ random\ intervals\ in\ a\ genome
+				reldist\:Calculate\ the\ distribution\ of\ relative\ distances\ b/w\ two\ files
+				sample\:Sample\ random\ records\ from\ file\ using\ reservoir\ sampling
+				shuffle\:Randomly\ redistrubute\ intervals\ in\ a\ genome
+				slop\:Adjust\ the\ size\ of\ intervals
+				sort\:Order\ the\ intervals\ in\ a\ file
+				spacing\:Report\ the\ gap\ lengths\ between\ intervals\ in\ a\ file
+				split\:Split\ a\ file\ into\ multiple\ files\ with\ equal\ records\ or\ base\ pairs
+				subtract\:Remove\ intervals\ based\ on\ overlaps\ b/w\ two\ files
+				tag\:Tag\ BAM\ alignments\ based\ on\ overlaps\ with\ interval\ files
+				unionbedg\:Combines\ coverage\ intervals\ from\ multiple\ BEDGRAPH\ files
+				window\:Find\ overlapping\ intervals\ within\ a\ window\ around\ an\ interval
+			))'
+			'(- *)--help[Print help menu]'
+			'(- *)--version[What version of bedtools are you using?]'
+			'(- *)--contact[Feature requests, bugs, mailing lists, etc]'
+		)
+		_arguments $args[@] && ret=0
+	else
+		_bedtools-subcommand $words[2] && ret=0
+	fi
+	return ret
+}
+
+extra_arg=""
+if [[ $service == bedtools ]]; then
+	extra_arg='1:command:'
+	_bedtools-main
+else
+	_bedtools-subcommand $aliases[$service]
+fi
+
+
+
+
