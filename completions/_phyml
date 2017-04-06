@@ -1,0 +1,60 @@
+#compdef phyml
+
+_phyml() {
+	integer ret=1
+	local -a args
+	args+=(
+		'(-i --input)'{-i+,--input=}'[sequence file in PHYLIP format]:file:_files'
+		'(-d --datatype)'{-d+,--datatype=}'[pick data type]:data type:(aa nt generic)'
+		'(-q --sequential)'{-q,--sequential}'[Changes interleaved format (default) to sequential format]'
+		'(-n --multiple)'{-n+,--multiple=}'[the number of data sets to analyse]:number:'
+		'(-u --inputtree -p --pars)'{-p,--pars}'[Use a minimum parsimony starting tree]'
+		# todo: explain special values
+		'(-b --bootstrap)'{-b+,--bootstrap=}'[Use bootstrapping]:int:'
+		# todo: encode model and split nt/aa
+		'(-m --model)'{-m+,--model=}'[Pick substitution model]:model:(
+			HKY85 JC69 K80 F81 F84 TN93 GTR custom
+			WAG JTT MtREV Dayhoff DCMut RtREV CpREV VT AB
+			Blosum62 MtMam MtArt HIVw HIVb
+		)'
+		'--aa_rate_file=[amino acid substitution rate matrix]:file:_files'
+		# todo: see phyml -h
+		'-f+[Character frequencies]:opt:(e m custom)'
+		'(-t --ts\/tv)'{-t+,--ts\/tv=}'[transition/transversion ratio (use "e" for maximum likelihood estimate)]:ts/tv ratio:'
+		'(-v --pinv)'{-v+,--pinv=}'[proportion of invariable sites ("e" for  maximum likelihood estimate)]:prop invar:'
+		'(-c --nclasses)'{-c+,--nclasses=}'[number of relative substitution rate categories]:nb subst cat:'
+		'(--freerates --free_rates --freerate --free_rate)'{--freerates,--free_rates,--freerate,--free_rate}'[FreeRate model of substitution rate variation across sites]'
+		'(-a --alpha)'{-a+,--alpha}'[distribution of the gamma distribution shape parameter (use "e" to get maximum likelihood estimate)]:gamma:'
+		'(-s --search)'{-s+,--search=}'[Tree topology search operation option]:move:((
+			NNI\:fast,\ default
+			SPR\:a\ bit\ slower\ than\ NNI
+			BEST\:best\ of\ NNI\ and\ SPR\ search
+		))'
+		'(-u --inputtree)'{-u+,--inputtree=}'[starting tree filename]:user tree file:_files'
+		'-o+[This option focuses on specific parameter optimisation]:parameter:((
+			tlr\:tree\ topology,\ branch\ length\ and\ rate\ parameters\ are\ optimised
+			tl\:tree\ topology\ and\ branch\ length\ are\ optimised
+			lr\:branch\ length\ and\ rate\ parameters\ are\ optimised
+			l\:branch\ length\ are\ optimised
+			r\:rate\ parameters\ are\ optimised
+			n\:no\ parameter\ is\ optimised
+		))'
+		# todo: only valid if -s is SPR
+		'--rand_start=[This option sets the initial tree to random]'
+		# todo: only valid if -s is SPR
+		'--n_rand_starts=[the number of initial random trees to be used]:num:'
+		'--r_seed=[seed used to initiate the random number generator]:num:'
+		'--print_site_lnl[Print the likelihood for each site]'
+		'--print_trace[Print each phylogeny explored during the tree search]'
+		'--run_id=[Append the string at the end of each PhyML output file]:string:'
+		'--quiet[No interactive question and quiet output]'
+		'--no_memory_check[No interactive question for memory usage]'
+		'--alias_subpatt[Site aliasing is generalized at the subtree level]'
+		'--boot_progress_display=[bootstrap progress bar update frequency]:num:'
+	)
+	_arguments -s -w -S $args[@] && ret=0
+	return ret
+}
+
+_phyml
+
