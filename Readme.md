@@ -5,6 +5,15 @@ The command line is the usual working environment in bioinformatics. This reposi
 
 ## Installation
 
+`biozsh` should be able to be installed using one of the ZSH package managers,
+e.g. [`zgen`](https://github.com/tarjoilija/zgen). Just add the following to
+your zshrc, before `zgen save`:
+
+    zgen load kloetzl/biozsh
+
+
+### Manual installation
+
 I still have to figure out, how to do a proper installation. But this should work for now:
 
     git clone https://github.com/kloetzl/biozsh
