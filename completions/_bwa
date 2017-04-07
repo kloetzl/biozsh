@@ -1,0 +1,281 @@
+#compdef bwa
+
+_bwa-aln() {
+	integer ret=1
+	local -a args
+	if (( $words[(I)-b] )); then
+		args+=(
+			'-0[use single-end reads only]'
+			'-1[use the 1st read in a pair]'
+			'-2[use the 2nd read in a pair]'
+		)
+	fi
+	args+=(
+		'1:subcommand:'
+		'2:prefix:_guard "^-" prefix'
+		'3:in.fq:_files'
+		'-B+[length of barcode]:int:'
+		'-b[the input read file is in the BAM format]'
+		'-d+[maximum occurrences for extending a long deletion (default: 10)]:int:'
+		'-E+[gap extension penalty (default: 4)]:int:'
+		'-e+[maximum number of gap extensions, -1 for disabling long gaps (default: -1)]:int:'
+		'-f+[file to write output to instead of stdout]:file:_files'
+		'-i+[do not put an indel within INT bp towards the ends (default: 5)]:int:'
+		'-I[the input is in the Illumina 1.3+ FASTQ-like format]'
+		'-k+[maximum differences in the seed (default: 2)]:int:'
+		'-l+[seed length (default: 32)]:int:'
+		'-L[log-scaled gap penalty for long deletions]'
+		'-m+[maximum entries in the queue (default: 2000000)]:int:'
+		'-M+[mismatch penalty (default: 3)]:int:'
+		'-n+[max #diff (int) or missing prob under 0.02 err rate (float)]:num:'
+		'-N[non-iterative mode: search for all n-difference hits (slooow)]'
+		'-O+[gap open penalty (default: 11)]:int:'
+		'-o+[maximum number or fraction of gap opens (default: 1)]:int:'
+		'-q+[quality threshold for read trimming down to 35bp (default: 0)]:int:'
+		'-R+[stop searching when there are >INT equally best hits (default: 30)]:int:'
+		'-t+[number of threads (default: 1)]:int:'
+		'-Y[filter Casava-filtered sequences]'
+	)
+	_arguments -s -w -S $args[@] && ret=0
+	return ret
+}
+
+_bwa-bwasw() {
+	integer ret=1
+	local -a args
+	args+=(
+		'1:subcommand:'
+		'2:prefix:_guard "^-" prefix'
+		'*:query:_files'
+		'-a+[score for a match (default: 1)]:int:'
+		'-b+[mismatch penalty (default: 3)]:int:'
+		'-c+[coefficient of length-threshold adjustment [5.5]]:float:'
+		'-C[copy FASTA/Q comment to SAM output]'
+		'-f+[file to output results to instead of stdout]:file:_files'
+		'-G+[maximum gap size during chaining (default: 10000)]:int:'
+		'-H[in SAM output, use hard clipping instead of soft clipping]'
+		'-I+[ignore pairs with insert >=INT for inferring the size distr (default: 20000)]:int:'
+		'-m+[mask level (default: 0.50)]:float:'
+		'-M[mark multi-part alignments as secondary]'
+		'-N+[# seeds to trigger rev aln; 2*INT is also the chaining threshold (default: 5)]:int:'
+		'-q+[gap open penalty (default: 5)]:int:'
+		'-r+[gap extension penalty (default: 2)]:int:'
+		'-s+[maximum seeding interval size (default: 3)]:int:'
+		'-S[skip Smith-Waterman read pairing]'
+		'-t+[number of threads (default: 1)]:int:'
+		'-T+[score threshold divided by a (default: 30)]:int:'
+		'-w+[band width (default: 50)]:int:'
+		'-z+[Z-best (default: 1)]:int:'
+	)
+	_arguments -s -w -S $args[@] && ret=0
+	return ret
+}
+
+_bwa-bwt2sa() {
+	_arguments \
+		'-i+[integer size]:size:(32)' \
+		'*:file:_files'
+	return 0
+}
+
+_bwa-bwtupdate() {
+	_arguments '1:subcommand:' '*:file:_files'
+	return 0
+}
+
+_bwa-fa2pac() {
+	_arguments '1:subcommand:' '-f[flag]' '*:file:_files'
+	return 0
+}
+
+_bwa-fastmap() {
+	integer ret=1
+	local -a args
+	args+=(
+		'1:subcommand:'
+		'2:idxbase:_files'
+		'*:in.fastq:_files'
+		'-i+[min SMEM interval size (default: 1)]:int:'
+		'-I+[stop if MEM is longer than -l with a size less than INT (default: 0)]:int:'
+		'-l+[max MEM length (default: 2147483647)]:int:'
+		'-l+[min SMEM length to output (default: 17)]:int:'
+		'-w+[max interval size to find coordiantes (default: 20)]:int:'
+	)
+	_arguments -s -w -S $args[@] && ret=0
+	return ret
+}
+
+_bwa-index() {
+	integer ret=1
+	local -a args
+	args+=(
+		'1:subcommand:'
+		'*:in.fasta:_files'
+		'-a+[BWT construction algorithm]:str:(bwtsw is div)'
+		'-b+[block size for the bwtsw algorithm (effective with -a bwtsw, default: 10000000)]:int:'
+		'-p+[prefix of the index (same as fasta name)]:str:'
+		'-6[index files named as <in.fasta>.64.* instead of <in.fasta>.*]'
+	)
+	_arguments -s -w -S $args[@] && ret=0
+	return ret
+}
+
+_bwa-mem() {
+	integer ret=1
+	local -a args
+	args+=(
+		'1:subcommand:'
+		'2:idxbase:_files'
+		'*:fastq query:_files'
+
+
+		'-A+[score for a sequence match, which scales options -TdBOELU unless overridden (default: 1)]:int:'
+		'-B+[penalty for a mismatch (default: 4)]:int:'
+		'-c+[skip seeds with more than INT occurrences (default: 500)]:int:'
+		'-D+[drop chains shorter than FLOAT fraction of the longest overlapping chain (default: 0.50)]:float:'
+		'-d+[off-diagonal X-dropoff (default: 100)]:int:'
+		'-E+[gap extension penalty; a gap of size k cost "{-O} + {-E}*k" (default: 1,1)]:int list:'
+		'-h+[if there are <INT hits with score >80% of the max score, output all in XA (default: 5,200)]:int list:'
+		'-H+[insert STR to header if it starts with @; or insert lines in FILE]:str/file:_files'
+		'-k+[minimum seed length (default: 19)]:int:'
+		'-L+[penalty for 5"- and 3"-end clipping (default: 5,5)]:int list:'
+		'-m+[perform at most INT rounds of mate rescues for each read (default: 50)]:int:'
+		'-O+[gap open penalties for deletions and insertions (default: 6,6)]:int list:'
+		'-r+[look for internal seeds inside a seed longer than {-k} * FLOAT (default: 1.5)]:float:'
+		'-R+[read group header line such as "@RG\\tID:foo\\tSM:bar"]:str:'
+		'-T+[minimum score to output (default: 30)]:int:'
+		'-t+[number of threads (default: 1)]:int:'
+		'-U+[penalty for an unpaired read pair (default: 17)]:int:'
+		'-v+[verbose level]:int:((
+				1\:error
+				2\:warning
+				3\:message
+				4\:debugging
+			))'
+		'-w+[band width for banded alignment (default: 100)]:int:'
+		'-W+[discard a chain if seeded bases shorter than INT (default: 0)]:int:'
+		'-x+[read type]:str:'
+		'-y+[seed occurrence for the 3rd round seeding (default: 20)]:int:'
+		'-a[output all alignments for SE or unpaired PE]'
+		'-C[append FASTA/FASTQ comment to SAM output]'
+		'-e[discard full-length exact matches]'
+		'-j[treat ALT contigs as part of the primary assembly (i.e. ignore <idxbase>.alt file)]'
+		'-M[mark shorter split hits as secondary]'
+		'-P[skip pairing; mate rescue performed unless -S also in use]'
+		'-p[smart pairing (ignoring in2.fq)]'
+		'-S[skip mate rescue]'
+		'-V[output the reference FASTA header in the XR tag]'
+		'-Y[use soft clipping for supplementary alignments]'
+		'-I+[specify parameters of the insert size distribution]:parameter list:'
+	)
+	_arguments -s -w -S $args[@] && ret=0
+	return ret
+}
+
+_bwa-pac2bwt() {
+	_arguments '1:subcommand:' '-d[flag]' '*:file:_files'
+	return 0
+}
+
+_bwa-pac2bwtgen() {
+	_arguments '1:subcommand:' '*:file:_files'
+	return 0
+}
+
+_bwa-pemerge() {
+	integer ret=1
+	local -a args
+	args+=(
+		'1:subcommand:'
+		'*:in.fastq:_files'
+		'(-u)-m[output merged reads only]'
+		'(-m)-u[output unmerged reads only]'
+		'-Q+[max sum of errors (default: 70)]:int:'
+		'-t+[number of threads (default: 1)]:int:'
+		'-T+[minimum end overlap (default: 10)]:int:'
+	)
+	_arguments -s -w -S $args[@] && ret=0
+	return ret
+}
+
+_bwa-sampe() {
+	integer ret=1
+	local -a args
+	args+=(
+		'1:subcommand:'
+		'2:prefix:_guard "^-" prefix'
+		'*:in.fastq:_files'
+		'-a+[maximum insert size (default: 500)]:int:'
+		'(-s)-A[disable insert size estimate]'
+		'-c+[prior of chimeric rate (lower bound, default: 1.0e-05)]:float:'
+		'-f+[sam file to output results to]:file:'
+		'-N+[maximum hits to output for discordant pairs (default: 10)]:int:'
+		'-n+[maximum hits to output for paired reads (default: 3)]:int:'
+		'-o+[maximum occurrences for one end (default: 100000)]:int:'
+		'-P[preload index into memory (for base-space reads only)]'
+		'-r+[read group header line such as "@RG\\tID:foo\\tSM:bar"]:str:'
+		'-s[disable Smith-Waterman for the unmapped mate]'
+	)
+	_arguments -s -w -S $args[@] && ret=0
+	return ret
+}
+
+_bwa-samse() {
+	integer ret=1
+	local -a args
+	args+=(
+		'1:subcommand:'
+		'2:prefix:_guard "^-" prefix'
+		'*:file:_files'
+		'-f+[out.sam]:file:_files'
+		'-n+[maximum occurrence]:num:'
+		'-r+[RG line]:rg line:'
+	)
+	_arguments -s -w -S $args[@] && ret=0
+	return ret
+}
+
+_bwa-shm() {
+	integer ret=1
+	local -a args
+	args+=(
+		'1:subcommand:'
+		'*:file:_files'
+		'-d[destroy all indices in shared memory]'
+		'-f+[temporary file to reduce peak memory]:file:_files'
+		'-l[list names of indices in shared memory]'
+	)
+	_arguments -s -w -S $args[@] && ret=0
+	return ret
+}
+
+_bwa() {
+	integer ret=1
+	if ((CURRENT == 2)); then
+		_describe 'subcommand' '(
+			aln\:gapped\/ungapped\ alignment
+			bwasw\:BWA-SW\ for\ long\ queries
+			bwt2sa\:generate\ SA\ from\ BWT\ and\ Occ
+			bwtupdate\:update\ .bwt\ to\ the\ new\ format
+			fa2pac\:convert\ FASTA\ to\ PAC\ format
+			fastmap\:identify\ super-maximal\ exact\ matches
+			index\:index\ sequences\ in\ the\ FASTA\ format
+			mem\:BWA\-MEM\ algorithm
+			pac2bwt\:generate\ BWT\ from\ PAC
+			pac2bwtgen\:alternative\ algorithm\ for\ generating\ BWT
+			pemerge\:merge\ overlapping\ paired\ ends\ \(EXPERIMENTAL\)
+			sampe\:generate\ alignment\ \(paired\ ended\)
+			samse\:generate\ alignment\ \(single\ ended\)
+			shm\:manage\ indices\ in\ shared\ memory
+		)' && ret=0
+	else
+		# delegate to sub commands
+		local subcmd=_bwa-$words[2]
+		if ! _call_function ret $subcmd ; then
+			_message "unknown sub-command: $words(default: 1)"
+		fi
+	fi
+	return ret
+}
+
+_bwa
