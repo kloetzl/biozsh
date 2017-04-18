@@ -17,7 +17,7 @@ _khmer-abundance-dist() {
 		"($info -s --squash)"{-s,--squash}'[Overwrite existing output_histogram_filename]'
 		"($info -z --no-zero)"{-z,--no-zero}'[Do not output zero-count bins]'
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -30,20 +30,20 @@ _khmer-abundance-dist-single() {
 		'3:output histogram file:_files'
 		'(- *)'{-h,--help}'[show help message and exit]'
 		'(- *)--version[show program version number and exit]'
-		"($info -k --ksize)"{-k,--ksize}'[k-mer size to use (default: 32)]:ksize:'
-		"($info -N --n_tables)"{-N,--n_tables}'[number of tables to use in k-mer countgraph (default:4)]:n_tables:'
-		"($info -U --unique-kmers)"{-U,--unique-kmers}'[approximate number of unique kmers in the input set]:unique kmers:'
-		"($info)--fp-rate[Override the automatic FP rate setting for the current script]:fp_rate:"
-		"($info -x --max-tablesize -M --max-memory-usage)"{-x,--max-tablesize}'[upper bound on tablesize to use]:max_tablesize:'
-		"($info -x --max-tablesize -M --max-memory-usage)"{-M,--max-memory-usage}'[maximum amount of memory to use for data structure]:max_memory_usage:'
+		"($info -k --ksize)"{-k+,--ksize=}'[k-mer size to use (default: 32)]:ksize:'
+		"($info -N --n_tables)"{-N+,--n_tables=}'[number of tables to use in k-mer countgraph (default:4)]:n_tables:'
+		"($info -U --unique-kmers)"{-U+,--unique-kmers=}'[approximate number of unique kmers in the input set]:unique kmers:'
+		"($info)--fp-rate=[Override the automatic FP rate setting for the current script]:fp_rate:"
+		"($info -x --max-tablesize -M --max-memory-usage)"{-x+,--max-tablesize=}'[upper bound on tablesize to use]:max_tablesize:'
+		"($info -x --max-tablesize -M --max-memory-usage)"{-M+,--max-memory-usage=}'[maximum amount of memory to use for data structure]:max_memory_usage:'
 		"($info -T --threads)"{--threads,-T}'[Number of simultaneous threads to execute (default: 1)]:threads:'
 		"($info -b --no-bigcount)"{-b,--no-bigcount}'[Do not count k-mers past 255]'
 		"($info -f --force)"{-f,--force}'[Overwrite output file if it exists]'
 		"($info -s --squash)"{-s,--squash}'[Overwrite existing output_histogram_filename]'
 		"($info -z --no-zero)"{-z,--no-zero}'[Do not output zero-count bins]'
-		"($info)--savegraph[Save the k-mer countgraph to the specified file]:file:_files"
+		"($info)--savegraph=[Save the k-mer countgraph to the specified file]:file:_files"
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -56,10 +56,10 @@ _khmer-annotate-partitions() {
 		'3:input FAST[AQ] sequences to annotate:_files'
 		'(- *)'{-h,--help}'[show help message and exit]'
 		'(- *)--version[show program version number and exit]'
-		"($info -k --ksize)"{-k,--ksize}'[k-mer size to use (default: 32)]:ksize:'
+		"($info -k --ksize)"{-k+,--ksize=}'[k-mer size to use (default: 32)]:ksize:'
 		"($info -f --force)"{-f,--force}'[Overwrite output file if it exists]'
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -75,7 +75,7 @@ _khmer-count-median() {
 		'(- *)--version[show program version number and exit]'
 		"($info -f --force)"{-f,--force}'[Overwrite output file if it exists]'
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -88,19 +88,19 @@ _khmer-do-partition() {
 		'*:input FAST[AQ] sequences to annotate:_files'
 		'(- *)'{-h,--help}'[show help message and exit]'
 		'(- *)--version[show program version number and exit]'
-		"($info -k --ksize)"{-k,--ksize}'[k-mer size to use (default: 32)]:ksize:'
+		"($info -k --ksize)"{-k+,--ksize=}'[k-mer size to use (default: 32)]:ksize:'
 		"($info -f --force)"{-f,--force}'[Continue even if specified input files do not exist or are empty]'
-		"($info -N --n_tables)"{-N,--n_tables}'[number of tables to use in k-mer countgraph (default:4)]:n_tables:'
-		"($info -U --unique-kmers)"{-U,--unique-kmers}'[approximate number of unique kmers in the input set]:unique kmers:'
-		"($info)--fp-rate[Override the automatic FP rate setting for the current script]:fp_rate:"
-		"($info -x --max-tablesize -M --max-memory-usage)"{-x,--max-tablesize}'[upper bound on tablesize to use]:max_tablesize:'
-		"($info -x --max-tablesize -M --max-memory-usage)"{-M,--max-memory-usage}'[maximum amount of memory to use for data structure]:max_memory_usage:'
-		"($info -T --threads)"{-T,--threads}'[Number of simultaneous threads to execute (default: 1)]:threads:'
-		"($info -s --subset-size)"{-s,--subset-size}'[Set subset size (usually 1e5-1e6 is good, default: 100000)]:subset size:'
+		"($info -N --n_tables)"{-N+,--n_tables=}'[number of tables to use in k-mer countgraph (default:4)]:n_tables:'
+		"($info -U --unique-kmers)"{-U+,--unique-kmers=}'[approximate number of unique kmers in the input set]:unique kmers:'
+		"($info)--fp-rate=[Override the automatic FP rate setting for the current script]:fp_rate:"
+		"($info -x --max-tablesize -M --max-memory-usage)"{-x+,--max-tablesize=}'[upper bound on tablesize to use]:max_tablesize:'
+		"($info -x --max-tablesize -M --max-memory-usage)"{-M+,--max-memory-usage=}'[maximum amount of memory to use for data structure]:max_memory_usage:'
+		"($info -T --threads)"{-T+,--threads=}'[Number of simultaneous threads to execute (default: 1)]:threads:'
+		"($info -s --subset-size)"{-s+,--subset-size=}'[Set subset size (usually 1e5-1e6 is good, default: 100000)]:subset size:'
 		"($info)--no-big-traverse[Truncate graph joins at big traversals]"
 		"($info)--keep-subsets[Keep individual subsets]"
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -112,12 +112,12 @@ _khmer-extract-long-sequences() {
 		'*:input FAST[AQ] sequences:_files'
 		'(- *)'{-h,--help}'[show help message and exit]'
 		'(- *)--version[show program version number and exit]'
-		"($info -o --output)"{-o,--output}'[The output sequence file]:output file:_files'
-		"($info -l --length)"{-l,--length}'[The minimum length of the sequence file]:length:'
+		"($info -o --output)"{-o+,--output=}'[The output sequence file]:output file:_files'
+		"($info -l --length)"{-l+,--length=}'[The minimum length of the sequence file]:length:'
 		"($info --bzip)--gzip[Compress output using gzip]"
 		"($info --gzip)--bzip[Compress output using bzip2]"
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -131,11 +131,11 @@ _khmer-extract-paired-reads() {
 		'(- *)--version[show program version number and exit]'
 		"($info --bzip)--gzip[Compress output using gzip]"
 		"($info --gzip)--bzip[Compress output using bzip2]"
-		"($info -d --output-dir -p --output-paired -s --output-single)"{-d,--output-dir}'[Output split reads to specified directory]:_files -/'
-		"($info -p --output-paired -d --output-dir)"{-p,--output-paired}'[Output paired reads to this file]:_files'
-		"($info -s --output-single -d --output-dir)"{-s,--output-single}'[Output orphaned reads to this file]:_files'
+		"($info -d --output-dir -p --output-paired -s --output-single)"{-d+,--output-dir=}'[Output split reads to specified directory]:_files -/'
+		"($info -p --output-paired -d --output-dir)"{-p+,--output-paired=}'[Output paired reads to this file]:_files'
+		"($info -s --output-single -d --output-dir)"{-s+,--output-single=}'[Output orphaned reads to this file]:_files'
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -150,12 +150,12 @@ _khmer-extract-partitions() {
 		'(- *)--version[show program version number and exit]'
 		"($info --bzip)--gzip[Compress output using gzip]"
 		"($info --gzip)--bzip[Compress output using bzip2]"
-		"($info -X --max-size)"{-X,--max-size}'[Max group size (n sequences, default: 1000000)]:max size:'
-		"($info -m --min-partition-size)"{-m,--min-partition-size}'[Minimum partition size worth keeping (default: 5)]:min part size:'
+		"($info -X --max-size)"{-X+,--max-size=}'[Max group size (n sequences, default: 1000000)]:max size:'
+		"($info -m --min-partition-size)"{-m+,--min-partition-size=}'[Minimum partition size worth keeping (default: 5)]:min part size:'
 		"($info -n --no-output-groups)"{-n,--no-output-groups}'[Do not actually output groups files]'
 		"($info -U --output-unassigned)"{-U,--output-unassigned}'[Output unassigned sequences, too]'
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -169,10 +169,10 @@ _khmer-fastq-to-fasta() {
 		'(- *)--version[show program version number and exit]'
 		"($info --bzip)--gzip[Compress output using gzip]"
 		"($info --gzip)--bzip[Compress output using bzip2]"
-		"($info -o --output)"{-o,--output}'[Output FASTA sequence file]:filename:_files'
+		"($info -o --output)"{-o+,--output=}'[Output FASTA sequence file]:filename:_files'
 		"($info -n --n_keep)"{-k,--n_keep}"[Keep reads containing 'N']"
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -188,13 +188,13 @@ _khmer-filter-abund() {
 		"($info --bzip)--gzip[Compress output using gzip]"
 		"($info --gzip)--bzip[Compress output using bzip2]"
 		"($info -f --force)"{-f,--force}'[Overwrite output file if it exists]'
-		"($info -T --threads)"{-T,--threads}'[Number of simultaneous threads to execute]:threads:'
-		"($info -C --cutoff)"{-C,--cutoff}'[Trim at k-mers below this abundance]:cutoff:'
+		"($info -T --threads)"{-T+,--threads=}'[Number of simultaneous threads to execute]:threads:'
+		"($info -C --cutoff)"{-C+,--cutoff=}'[Trim at k-mers below this abundance]:cutoff:'
 		"($info -V --variable-coverage)"{-V,--variable-coverage}'[Only trim low-abundance k-mers from sequences that have high coverage]'
-		"($info -Z --normalize-to)"{-Z,--normalize-to}'[Base the variable-coverage cutoff on this median k-mer abundance]:normalize to:'
-		"($info -o --output)"{-o,--output}'[Output the trimmed sequences into a single]:filename:_files'
+		"($info -Z --normalize-to)"{-Z+,--normalize-to=}'[Base the variable-coverage cutoff on this median k-mer abundance]:normalize to:'
+		"($info -o --output)"{-o+,--output=}'[Output the trimmed sequences into a single]:filename:_files'
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -209,17 +209,17 @@ _khmer-filter-abund-single() {
 		"($info --bzip)--gzip[Compress output using gzip]"
 		"($info --gzip)--bzip[Compress output using bzip2]"
 		"($info -f --force)"{-f,--force}'[Overwrite output file if it exists]'
-		"($info -k --ksize)"{-k,--ksize}'[k-mer size to use (default: 32)]:ksize:'
-		"($info -N --n_tables)"{-N,--n_tables}'[number of tables to use in k-mer countgraph (default:4)]:n_tables:'
-		"($info -U --unique-kmers)"{-U,--unique-kmers}'[approximate number of unique kmers in the input set]:unique kmers:'
-		"($info)--fp-rate[Override the automatic FP rate setting for the current script]:fp_rate:"
-		"($info -x --max-tablesize -M --max-memory-usage)"{-x,--max-tablesize}'[upper bound on tablesize to use]:max_tablesize:'
-		"($info -x --max-tablesize -M --max-memory-usage)"{-M,--max-memory-usage}'[maximum amount of memory to use for data structure]:max_memory_usage:'
-		"($info -T --threads)"{--threads,-T}'[Number of simultaneous threads to execute (default: 1)]:threads:'
-		"($info -C --cutoff)"{-C,--cutoff}'[Trim at k-mers below this abundance]:cutoff:'
-		"($info)--savegraph[Save the k-mer countgraph to the specified file]:file:_files"
+		"($info -k --ksize)"{-k+,--ksize=}'[k-mer size to use (default: 32)]:ksize:'
+		"($info -N --n_tables)"{-N+,--n_tables=}'[number of tables to use in k-mer countgraph (default:4)]:n_tables:'
+		"($info -U --unique-kmers)"{-U+,--unique-kmers=}'[approximate number of unique kmers in the input set]:unique kmers:'
+		"($info)--fp-rate=[Override the automatic FP rate setting for the current script]:fp_rate:"
+		"($info -x --max-tablesize -M --max-memory-usage)"{-x+,--max-tablesize=}'[upper bound on tablesize to use]:max_tablesize:'
+		"($info -x --max-tablesize -M --max-memory-usage)"{-M+,--max-memory-usage=}'[maximum amount of memory to use for data structure]:max_memory_usage:'
+		"($info -T --threads)"{-T+,--threads=}'[Number of simultaneous threads to execute (default: 1)]:threads:'
+		"($info -C --cutoff)"{-C+,--cutoff=}'[Trim at k-mers below this abundance]:cutoff:'
+		"($info)--savegraph=[Save the k-mer countgraph to the specified file]:file:_files"
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -232,10 +232,10 @@ _khmer-filter-stoptags() {
 		'3:input sequence file:_files'
 		'(- *)'{-h,--help}'[show help message and exit]'
 		'(- *)--version[show program version number and exit]'
-		"($info -k --ksize)"{-k,--ksize}'[k-mer size to use (default: 32)]:ksize:'
+		"($info -k --ksize)"{-k+,--ksize=}'[k-mer size to use (default: 32)]:ksize:'
 		"($info -f --force)"{-f,--force}'[Overwrite output file if it exists]'
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -248,14 +248,14 @@ _khmer-find-knots(){
 		'(- *)'{-h,--help}'[show help message and exit]'
 		'(- *)--version[show program version number and exit]'
 		"($info -f --force)"{-f,--force}'[Continue past warnings]'
-		"($info -k --ksize)"{-k,--ksize}'[k-mer size to use (default: 32)]:ksize:'
-		"($info -N --n_tables)"{-N,--n_tables}'[number of tables to use in k-mer countgraph (default:4)]:n_tables:'
-		"($info -U --unique-kmers)"{-U,--unique-kmers}'[approximate number of unique kmers in the input set]:unique kmers:'
-		"($info)--fp-rate[Override the automatic FP rate setting for the current script]:fp_rate:"
-		"($info -x --max-tablesize -M --max-memory-usage)"{-x,--max-tablesize}'[upper bound on tablesize to use]:max_tablesize:'
-		"($info -x --max-tablesize -M --max-memory-usage)"{-M,--max-memory-usage}'[maximum amount of memory to use for data structure]:max_memory_usage:'
+		"($info -k --ksize)"{-k+,--ksize=}'[k-mer size to use (default: 32)]:ksize:'
+		"($info -N --n_tables)"{-N+,--n_tables=}'[number of tables to use in k-mer countgraph (default:4)]:n_tables:'
+		"($info -U --unique-kmers)"{-U+,--unique-kmers=}'[approximate number of unique kmers in the input set]:unique kmers:'
+		"($info)--fp-rate=[Override the automatic FP rate setting for the current script]:fp_rate:"
+		"($info -x --max-tablesize -M --max-memory-usage)"{-x+,--max-tablesize=}'[upper bound on tablesize to use]:max_tablesize:'
+		"($info -x --max-tablesize -M --max-memory-usage)"{-M+,--max-memory-usage=}'[maximum amount of memory to use for data structure]:max_memory_usage:'
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -271,9 +271,9 @@ _khmer-interleave-reads(){
 		"($info -f --force)"{-f,--force}'[Continue past warnings]'
 		"($info --bzip)--gzip[Compress output using gzip]"
 		"($info --gzip)--bzip[Compress output using bzip2]"
-		"($info -o --output)"{-o,--output}'[filename]:file:_files'
+		"($info -o --output)"{-o+,--output=}'[filename]:file:_files'
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -287,16 +287,16 @@ _khmer-load-graph(){
 		'(- *)'{-h,--help}'[show help message and exit]'
 		'(- *)--version[show program version number and exit]'
 		"($info -f --force)"{-f,--force}'[Continue past warnings]'
-		"($info -k --ksize)"{-k,--ksize}'[k-mer size to use (default: 32)]:ksize:'
-		"($info -N --n_tables)"{-N,--n_tables}'[number of tables to use in k-mer countgraph (default:4)]:n_tables:'
-		"($info -U --unique-kmers)"{-U,--unique-kmers}'[approximate number of unique kmers in the input set]:unique kmers:'
-		"($info)--fp-rate[Override the automatic FP rate setting for the current script]:fp_rate:"
-		"($info -x --max-tablesize -M --max-memory-usage)"{-x,--max-tablesize}'[upper bound on tablesize to use]:max_tablesize:'
-		"($info -x --max-tablesize -M --max-memory-usage)"{-M,--max-memory-usage}'[maximum amount of memory to use for data structure]:max_memory_usage:'
+		"($info -k --ksize)"{-k+,--ksize=}'[k-mer size to use (default: 32)]:ksize:'
+		"($info -N --n_tables)"{-N+,--n_tables=}'[number of tables to use in k-mer countgraph (default:4)]:n_tables:'
+		"($info -U --unique-kmers)"{-U+,--unique-kmers=}'[approximate number of unique kmers in the input set]:unique kmers:'
+		"($info)--fp-rate=[Override the automatic FP rate setting for the current script]:fp_rate:"
+		"($info -x --max-tablesize -M --max-memory-usage)"{-x+,--max-tablesize=}'[upper bound on tablesize to use]:max_tablesize:'
+		"($info -x --max-tablesize -M --max-memory-usage)"{-M+,--max-memory-usage=}'[maximum amount of memory to use for data structure]:max_memory_usage:'
 		"($info -T --threads)"{--threads,-T}'[Number of simultaneous threads to execute (default: 1)]:threads:'
 		"($info -n --no-build-tagset)"{-n,--no-build-tagset}'[Do not construct tagset while loading sequences]'		
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -310,17 +310,17 @@ _khmer-load-into-counting(){
 		'(- *)'{-h,--help}'[show help message and exit]'
 		'(- *)--version[show program version number and exit]'
 		"($info -f --force)"{-f,--force}'[Continue past warnings]'
-		"($info -k --ksize)"{-k,--ksize}'[k-mer size to use (default: 32)]:ksize:'
-		"($info -N --n_tables)"{-N,--n_tables}'[number of tables to use in k-mer countgraph (default:4)]:n_tables:'
-		"($info -U --unique-kmers)"{-U,--unique-kmers}'[approximate number of unique kmers in the input set]:unique kmers:'
-		"($info)--fp-rate[Override the automatic FP rate setting for the current script]:fp_rate:"
-		"($info -x --max-tablesize -M --max-memory-usage)"{-x,--max-tablesize}'[upper bound on tablesize to use]:max_tablesize:'
-		"($info -x --max-tablesize -M --max-memory-usage)"{-M,--max-memory-usage}'[maximum amount of memory to use for data structure]:max_memory_usage:'
+		"($info -k --ksize)"{-k+,--ksize=}'[k-mer size to use (default: 32)]:ksize:'
+		"($info -N --n_tables)"{-N+,--n_tables=}'[number of tables to use in k-mer countgraph (default:4)]:n_tables:'
+		"($info -U --unique-kmers)"{-U+,--unique-kmers=}'[approximate number of unique kmers in the input set]:unique kmers:'
+		"($info)--fp-rate=[Override the automatic FP rate setting for the current script]:fp_rate:"
+		"($info -x --max-tablesize -M --max-memory-usage)"{-x+,--max-tablesize=}'[upper bound on tablesize to use]:max_tablesize:'
+		"($info -x --max-tablesize -M --max-memory-usage)"{-M+,--max-memory-usage=}'[maximum amount of memory to use for data structure]:max_memory_usage:'
 		"($info -T --threads)"{--threads,-T}'[Number of simultaneous threads to execute (default: 1)]:threads:'
 		"($info -b --no-bigcount)"{-b,--no-bigcount}'[Limit counts to 255]'
-		"($info -s --summary-info)"{-s,--summary-info}'[What format should the machine readable run summary be in?]:format:(json tsv)'
+		"($info -s --summary-info)"{-s+,--summary-info=}'[What format should the machine readable run summary be in?]:format:(json tsv)'
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -333,16 +333,16 @@ _khmer-make-initial-stoptags(){
 		'(- *)'{-h,--help}'[show help message and exit]'
 		'(- *)--version[show program version number and exit]'
 		"($info -f --force)"{-f,--force}'[Continue past warnings]'
-		"($info -k --ksize)"{-k,--ksize}'[k-mer size to use (default: 32)]:ksize:'
-		"($info -N --n_tables)"{-N,--n_tables}'[number of tables to use in k-mer countgraph (default:4)]:n_tables:'
-		"($info -U --unique-kmers)"{-U,--unique-kmers}'[approximate number of unique kmers in the input set]:unique kmers:'
-		"($info)--fp-rate[Override the automatic FP rate setting for the current script]:fp_rate:"
-		"($info -x --max-tablesize -M --max-memory-usage)"{-x,--max-tablesize}'[upper bound on tablesize to use]:max_tablesize:'
-		"($info -x --max-tablesize -M --max-memory-usage)"{-M,--max-memory-usage}'[maximum amount of memory to use for data structure]:max_memory_usage:'
-		"($info -s --subset-size)"{-s,--subset-size}'[Set subset size (default 1e4 is prob ok)]:subset size:'
-		"($info -S --stoptags)"{-S,--stoptags}'[Use stoptags in this file during partitioning]:file:_files'
+		"($info -k --ksize)"{-k+,--ksize=}'[k-mer size to use (default: 32)]:ksize:'
+		"($info -N --n_tables)"{-N+,--n_tables=}'[number of tables to use in k-mer countgraph (default:4)]:n_tables:'
+		"($info -U --unique-kmers)"{-U+,--unique-kmers=}'[approximate number of unique kmers in the input set]:unique kmers:'
+		"($info)--fp-rate=[Override the automatic FP rate setting for the current script]:fp_rate:"
+		"($info -x --max-tablesize -M --max-memory-usage)"{-x+,--max-tablesize=}'[upper bound on tablesize to use]:max_tablesize:'
+		"($info -x --max-tablesize -M --max-memory-usage)"{-M+,--max-memory-usage=}'[maximum amount of memory to use for data structure]:max_memory_usage:'
+		"($info -s --subset-size)"{-s+,--subset-size=}'[Set subset size (default 1e4 is prob ok)]:subset size:'
+		"($info -S --stoptags)"{-S+,--stoptags=}'[Use stoptags in this file during partitioning]:file:_files'
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -355,10 +355,10 @@ _khmer-merge-partitions(){
 		'(- *)'{-h,--help}'[show help message and exit]'
 		'(- *)--version[show program version number and exit]'
 		"($info -f --force)"{-f,--force}'[Continue past warnings]'
-		"($info -k --ksize)"{-k,--ksize}'[k-mer size to use (default: 32)]:ksize:'
+		"($info -k --ksize)"{-k+,--ksize=}'[k-mer size to use (default: 32)]:ksize:'
 		"($info)--keep-subsets[Keep individual subsets]"
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -371,26 +371,26 @@ _khmer-normalize-by-median(){
 		'(- *)'{-h,--help}'[show help message and exit]'
 		'(- *)--version[show program version number and exit]'
 		"($info -f --force)"{-f,--force}'[Continue past file reading errors]'
-		"($info -k --ksize)"{-k,--ksize}'[k-mer size to use (default: 32)]:ksize:'
-		"($info -N --n_tables)"{-N,--n_tables}'[number of tables to use in k-mer countgraph (default:4)]:n_tables:'
-		"($info -U --unique-kmers)"{-U,--unique-kmers}'[approximate number of unique kmers in the input set]:unique kmers:'
-		"($info)--fp-rate[Override the automatic FP rate setting for the current script]:fp_rate:"
-		"($info -x --max-tablesize -M --max-memory-usage)"{-x,--max-tablesize}'[upper bound on tablesize to use]:max_tablesize:'
-		"($info -x --max-tablesize -M --max-memory-usage)"{-M,--max-memory-usage}'[maximum amount of memory to use for data structure]:max_memory_usage:'
+		"($info -k --ksize)"{-k+,--ksize=}'[k-mer size to use (default: 32)]:ksize:'
+		"($info -N --n_tables)"{-N+,--n_tables=}'[number of tables to use in k-mer countgraph (default:4)]:n_tables:'
+		"($info -U --unique-kmers)"{-U+,--unique-kmers=}'[approximate number of unique kmers in the input set]:unique kmers:'
+		"($info)--fp-rate=[Override the automatic FP rate setting for the current script]:fp_rate:"
+		"($info -x --max-tablesize -M --max-memory-usage)"{-x+,--max-tablesize=}'[upper bound on tablesize to use]:max_tablesize:'
+		"($info -x --max-tablesize -M --max-memory-usage)"{-M+,--max-memory-usage=}'[maximum amount of memory to use for data structure]:max_memory_usage:'
 		"($info --bzip)--gzip[Compress output using gzip]"
 		"($info --gzip)--bzip[Compress output using bzip2]"
-		"($info -o --output)"{-o,--output}'[Only output a single file with the specified filename]:file:_files'
+		"($info -o --output)"{-o+,--output=}'[Only output a single file with the specified filename]:file:_files'
 		"($info -q --quiet)"{-q,--quiet}'[Be quiet]'
 		"($info -C --cutoff)"{-C,--cutoff}'[When the median k-mer coverage level above is above this number the read is not kept]'
 		"($info -p --paired --force_single)"{-p,--paired}'[Require that all sequences are paired]'
 		"($info -p --paired)--force_single[treat all sequences as single-ended/unpaired]"
-		"($info -u --unpaired-reads)"{-u,--unpaired-reads}'[include a file of unpaired reads to which -p/--paired does not apply]:file:_files'
-		"($info -s --savegraph)"{-s,--savegraph}'[save the k-mer countgraph after all reads are loaded]:file:_files'
-		"($info -R --report)"{-R,--report}'[report filename]:file:_files'
-		"($info)--report-frequency[report frequency]:frequency:"
-		"($info -l --loadgraph)"{-l,--loadgraph}'[load a precomputed k-mer graph]:file:_files'
+		"($info -u --unpaired-reads)"{-u+,--unpaired-reads=}'[include a file of unpaired reads to which -p/--paired does not apply]:file:_files'
+		"($info -s --savegraph)"{-s+,--savegraph=}'[save the k-mer countgraph after all reads are loaded]:file:_files'
+		"($info -R --report)"{-R+,--report=}'[report filename]:file:_files'
+		"($info)--report-frequency=[report frequency]:frequency:"
+		"($info -l --loadgraph)"{-l+,--loadgraph=}'[load a precomputed k-mer graph]:file:_files'
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -403,12 +403,12 @@ _khmer-partition-graph(){
 		'(- *)'{-h,--help}'[show help message and exit]'
 		'(- *)--version[show program version number and exit]'
 		"($info -f --force)"{-f,--force}'[Overwrite output file if it exists]'
-		"($info -s --subset-size)"{-s,--subset-size}'[Set subset size (default 1e4 is prob ok)]:subset size:'
-		"($info -S --stoptags)"{-S,--stoptags}'[Use stoptags in this file during partitioning]:file:_files'
+		"($info -s --subset-size)"{-s+,--subset-size=}'[Set subset size (default 1e4 is prob ok)]:subset size:'
+		"($info -S --stoptags)"{-S+,--stoptags=}'[Use stoptags in this file during partitioning]:file:_files'
 		"($info)--no-big-traverse[Truncate graph joins at big traversals]"
-		"($info -T --threads)"{-T,--threads}'[Number of simultaneous threads to execute]:threads:'
+		"($info -T --threads)"{-T+,--threads=}'[Number of simultaneous threads to execute]:threads:'
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -421,10 +421,10 @@ _khmer-readstats(){
 		'(- *)'{-h,--help}'[show help message and exit]'
 		'(- *)--version[show program version number and exit]'
 		"($info -f --force)"{-f,--force}'[Overwrite output file if it exists]'
-		"($info -o --output)"{-o,--output}'[output file for statistics]:file:_file'
+		"($info -o --output)"{-o+,--output=}'[output file for statistics]:file:_file'
 		"($info)--csv[Use the CSV format for the statistics, including column headers]"
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -437,16 +437,16 @@ _khmer-sample-reads-randomly(){
 		'(- *)'{-h,--help}'[show help message and exit]'
 		'(- *)--version[show program version number and exit]'
 		"($info -f --force)"{-f,--force}'[Overwrite output file if it exists]'
-		"($info -o --output)"{-o,--output}'[output file for statistics]:file:_file'
+		"($info -o --output)"{-o+,--output=}'[output file for statistics]:file:_file'
 		"($info --bzip)--gzip[Compress output using gzip]"
 		"($info --gzip)--bzip[Compress output using bzip2]"
 		"($info)--force_single[Ignore read pair information if present]"
-		"($info -N --num_reads)"{-N,--num_reads}'[number of reads]:num reads:'
-		"($info -M --max_reads)"{-M,--max_reads}'[number of reads to process]:max reads:'
-		"($info -S --samples)"{-S,--samples}'[number of samples]:num samples:'
-		"($info -R --random-seed)"{-R,--random-seed}'[Provide a random seed for the generator]:seed:'
+		"($info -N --num_reads)"{-N+,--num_reads=}'[number of reads]:num reads:'
+		"($info -M --max_reads)"{-M+,--max_reads=}'[number of reads to process]:max reads:'
+		"($info -S --samples)"{-S+,--samples=}'[number of samples]:num samples:'
+		"($info -R --random-seed)"{-R+,--random-seed=}'[Provide a random seed for the generator]:seed:'
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -461,12 +461,12 @@ _khmer-split-paired-reads(){
 		"($info -f --force)"{-f,--force}'[Overwrite output file if it exists]'
 		"($info --bzip)--gzip[Compress output using gzip]"
 		"($info --gzip)--bzip[Compress output using bzip2]"
-		"($info -d --output-dir -1 --output-first -2 --output-second)"{-d,--output-dir}'[Output split reads to specified directory]:file:_file -/'
-		"($info -0 --output-orphaned)"{-0,--output-orphaned}'[Allow "orphaned" reads and extract them to this file]:file:_files'
-		"($info -1 --output-first -d --output-dir)"{-1,--output-first}'[Output "left" reads to this file]:file:_files'
-		"($info -2 --output-second -d --output-dir)"{-2,--output-second}'[Output "right" reads to this file]:file:_files'
+		"($info -d --output-dir -1 --output-first -2 --output-second)"{-d+,--output-dir=}'[Output split reads to specified directory]:file:_file -/'
+		"($info -0 --output-orphaned)"{-0+,--output-orphaned=}'[Allow "orphaned" reads and extract them to this file]:file:_files'
+		"($info -1 --output-first -d --output-dir)"{-1+,--output-first=}'[Output "left" reads to this file]:file:_files'
+		"($info -2 --output-second -d --output-dir)"{-2+,--output-second=}'[Output "right" reads to this file]:file:_files'
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -479,24 +479,24 @@ _khmer-trim-low-abund(){
 		'(- *)'{-h,--help}'[show help message and exit]'
 		'(- *)--version[show program version number and exit]'
 		"($info)--force[Force]"
-		"($info -k --ksize)"{-k,--ksize}'[k-mer size to use (default: 32)]:ksize:'
-		"($info -N --n_tables)"{-N,--n_tables}'[number of tables to use in k-mer countgraph (default:4)]:n_tables:'
-		"($info -U --unique-kmers)"{-U,--unique-kmers}'[approximate number of unique kmers in the input set]:unique kmers:'
-		"($info)--fp-rate[Override the automatic FP rate setting for the current script]:fp_rate:"
-		"($info -x --max-tablesize -M --max-memory-usage)"{-x,--max-tablesize}'[upper bound on tablesize to use]:max_tablesize:'
-		"($info -x --max-tablesize -M --max-memory-usage)"{-M,--max-memory-usage}'[maximum amount of memory to use for data structure]:max_memory_usage:'
-		"($info -C --cutoff)"{-C,--cutoff}'[remove k-mers below this abundance]:num:'
+		"($info -k --ksize)"{-k+,--ksize=}'[k-mer size to use (default: 32)]:ksize:'
+		"($info -N --n_tables)"{-N+,--n_tables=}'[number of tables to use in k-mer countgraph (default:4)]:n_tables:'
+		"($info -U --unique-kmers)"{-U+,--unique-kmers=}'[approximate number of unique kmers in the input set]:unique kmers:'
+		"($info)--fp-rate=[Override the automatic FP rate setting for the current script]:fp_rate:"
+		"($info -x --max-tablesize -M --max-memory-usage)"{-x+,--max-tablesize=}'[upper bound on tablesize to use]:max_tablesize:'
+		"($info -x --max-tablesize -M --max-memory-usage)"{-M+,--max-memory-usage=}'[maximum amount of memory to use for data structure]:max_memory_usage:'
+		"($info -C --cutoff)"{-C+,--cutoff=}'[remove k-mers below this abundance]:num:'
 		"($info --bzip)--gzip[Compress output using gzip]"
 		"($info --gzip)--bzip[Compress output using bzip2]"
-		"($info -Z --normalize-to)"{-Z,--normalize-to}'[base cutoff on this median k-mer abundance]:cutoff:'
-		"($info -o --output)"{-o,--output}'[Only output a single file with the specified filename]:file:_files'
+		"($info -Z --normalize-to)"{-Z+,--normalize-to=}'[base cutoff on this median k-mer abundance]:cutoff:'
+		"($info -o --output)"{-o+,--output=}'[Only output a single file with the specified filename]:file:_files'
 		"($info -V --variable-coverage)"{-V,--variable-coverage}'[ Only trim low-abundance k-mers from sequences that have high coverage]'
-		"($info -l --loadgraph)"{-l,--loadgraph}'[load a precomputed k-mer graph]:file:_files'
-		"($info -s --savegraph)"{-s,--savegraph}'[save the k-mer countgraph after all reads are loaded]:file:_files'
-		"($info -T --tempdir)"{-T,--tempdir}'[Set tempdir]:tempdir:_files -/'
+		"($info -l --loadgraph)"{-l+,--loadgraph=}'[load a precomputed k-mer graph]:file:_files'
+		"($info -s --savegraph)"{-s+,--savegraph=}'[save the k-mer countgraph after all reads are loaded]:file:_files'
+		"($info -T --tempdir)"{-T+,--tempdir=}'[Set tempdir]:tempdir:_files -/'
 		"($info)--ignore-pairs[Ignore pairs]"
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -508,14 +508,14 @@ _khmer-unique-kmers(){
 		'*:Input FAST[AQ] sequence filename:_files'
 		'(- *)'{-h,--help}'[show help message and exit]'
 		'(- *)--version[show program version number and exit]'
-		"($info -k --ksize)"{-k,--ksize}'[k-mer size to use (default: 32)]:ksize:'
+		"($info -k --ksize)"{-k+,--ksize=}'[k-mer size to use (default: 32)]:ksize:'
 		"($info -q --quiet)"{-q,--quiet}'[Be quiet]'
-		"($info -e --error-rate)"{-e,--error-rate}'[Acceptable error rate (default: 0.01)]:float:'
-		"($info -R --report)"{-R,--report}'[generate informational report and write to file]:file:_files'
+		"($info -e --error-rate)"{-e+,--error-rate=}'[Acceptable error rate (default: 0.01)]:float:'
+		"($info -R --report)"{-R+,--report=}'[generate informational report and write to file]:file:_files'
 		"($info -S --stream-records)"{-S,--stream-records}'[write input sequences to stdout]'
 		"($info)--diagnostics[print out recommended tablesize arguments and restrictions]"
 	)
-	_arguments $args[@] && ret=0
+	_arguments -s $args[@] && ret=0
 	return ret
 }
 
@@ -556,7 +556,7 @@ _khmer() {
 			)'
 		)
 
-		_arguments $args[@]
+		_arguments -s $args[@]
 
 		ret=0
 	else
