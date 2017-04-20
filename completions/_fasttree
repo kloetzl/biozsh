@@ -1,0 +1,55 @@
+#compdef fasttree
+
+# This does not include all available options, but the FastTree help
+# is too messy for me to figure out how to use it.
+
+_fasttree() {
+	integer ret=1
+	local -a args
+	args+=(
+		"-n[read in multiple alignments]:number:"
+		"(-intree1)-intree[read the starting tree in from newickfile]:file:_files"
+		"(-intree)-intree1[read the same starting tree for each alignment]:file:_files"
+		"(-nopr)-quiet[do not write to standard error during normal operation]"
+		"(-quiet)-nopr[do not write the progress indicator to stderr]"
+		"-log[save intermediate trees]:file:_files"
+		"-quote[quote sequence names in the output]"
+		"-matrix[specify amino acid dissimilarity matrix]:file:_files"
+		"-rawdist[turn the log-correction off or use %different instead of Jukes-Cantor]"
+		"-pseudo[pseudocounts to estimate distances]::weight:"
+		"-nni[the number of rounds of min. evo. NNIs]:number:"
+		"-spr[the rounds of SPRs]:number:"
+		"(-mllen -mlnni)-noml[turn off both min-evo NNIs and SPRs]"
+		"(-noml -mlnni)-mllen[optimize branch lengths without ML NNIs]"
+		"(-noml -mllen)-mlnni[number of rounds of maximum-likelihood NNIs]:number:"
+		"-sprlength[the maximum length of a SPR move]:number:"
+		"-mlacc[always optimize all 5 branches at each NNI]:number:"
+		"-slownni[turn off heuristics to avoid constant subtrees]"
+		"-wag[Whelan-And-Goldman 2001 model]"
+		"-gtr[generalized time-reversible model]"
+		"(-nocat)-cat[rate categories of sites]:number:"
+		"(-cat)-nocat[no CAT model]"
+		"-gamma[report the likelihood under the discrete gamma model]"
+		"-nome[minimum-evolution bootstrap supports]"
+		"-nosupport[turn off support values]"
+		"-boot[number of bootstrap resamples]:number:"
+		"-seed[initialize the random number generator]:number:"
+		"(-fastest -notop)-slow[exhaustive search]"
+		"(-slow -2nd)-fastest[search the visible set only]"
+		"-notop[don't speed up the search via top-hit list]"
+		"-topm[set the top-hit list size to parameter*sqrt(N)]:number:"
+		"-close[the close heuristic, lower is more conservative]:number:"
+		"-refresh[join node comparison threshold]:number:"
+		"(-no2nd)-2nd[enable 2nd-level top hits heuristic]"
+		"(-2nd)-no2nd[disable 2nd-level top hits heuristic]"
+		"(-bionj)-nj[regular (unweighted) neighbor-joining]"
+		"(-nj)-bionj[weighted joins as in BIONJ]"
+		"-constraints[an alignment with values of 0, 1, and -]:file:_files"
+		"-constraintWeight[how strongly to weight the constraints]:number:"
+		"*:file:_files"
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_fasttree
