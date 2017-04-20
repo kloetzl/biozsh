@@ -1,0 +1,33 @@
+#compdef makeblastdb
+
+_makeblastdb() {
+	integer ret=1
+	local info="-h -help -version"
+	local -a args
+	args+=(
+		"(-)-h[Print usage and description]"
+		"(-)-help[Print usage, description, and arguments]"
+		"(-)-version[Print version number]"
+		"($info)-dbtype[Molecule type of target db]:type:(nucl prot)"
+		"($info)-in[Input file or database name]:file:_files"
+		"($info)-input_type[Type of the data specified in input file]:type:(asn1_bin asn1_txt blastdb fasta)"
+		"($info)-title[Title for BLAST database]:string:"
+		"($info)-parse_seqids[Option to parse seqid for FASTA input]"
+		"($info)-hash_index[Create index of sequence hash values]"
+		"($info)-mask_data[Comma-separated list of input files containing masking data]:file list:_sequence _files"
+		"($info -gi_mask)-mask_id[Comma-separated list of strings to uniquely identify the masking algorithm]:string list:"
+		"($info)-mask_desc[Comma-separated list of free form strings to describe the masking algorithm]:string list:"
+		"($info -mask_id -mask_desc)-gi_mask[Create GI indexed masking data]"
+		"($info)-gi_mask_name[Comma-separated list of masking data output files]:_sequence _files"
+		"($info)-out[Name of BLAST database to be created]:file:_files"
+		"($info)-max_file_sz[Maximum file size for BLAST database files]:size:"
+		"($info)-logfile[File to which the program log should be redirected]:file:_files"
+		"($info -taxid_map)-taxid[Taxonomy ID to assign to all sequences]:int:"
+		"($info -taxid)-taxid_map[Text file mapping sequence IDs to taxonomy IDs]:file:_files"
+			
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_makeblastdb
