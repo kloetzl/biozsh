@@ -1,0 +1,63 @@
+#compdef nhmmer
+
+_nhmmer() {
+	integer ret=1
+	local -a args
+	args+=(
+		"1:query hmmfile or alignfile:_files"
+		"2:target seqfile:_files"
+		"(- *)-h[show brief help on version and usage]"
+		"(-h)-o+[direct output to file, not stdout]:file:_files"
+		"(-h)-A+[save multiple alignment of all hits to file]:file:_files"
+		"(-h)--tblout=[save parseable table of hits to file]:file:_files"
+		"(-h)--dfamtblout=[save table of hits to file, in Dfam format]:file:_files"
+		"(-h)--aliscoresout=[save scores for each position in each alignment to]:file:_files"
+		"(-h)--hmmout[=if input is alignment(s), write produced hmms to file]:file:_files"
+		"(-h)--acc[prefer accessions over names in output]"
+		"(-h)--noali[don't output alignments, so output is smaller]"
+		"(-h)--notextw[unlimit ASCII text output line width]"
+		"(-h)--textw=[set max width of ASCII text output lines (n>=120)]:int:"
+		"(-h)--singlemx[use substitution score matrix w/ single-sequence MSA-format inputs]"
+		"(-h)--popen=[gap open probability (0<=x<0.5)]:number:"
+		"(-h)--pextend=[gap extend probability (0<=x<1)]:number:"
+		"(-h)--mx=[substitution score matrix choice (of some built-in matrices DNA1)]:matrix:"
+		"(-h)--mxfile=[read substitution score matrix from file]:file:_files"
+		"(-h -T)-E+[report sequences <= this E-value threshold in output (x>0)]:threshold:"
+		"(-h -E)-T+[report sequences >= this score threshold in output]:threshold:"
+		"(-h --incT)--incE=[consider sequences <= this E-value threshold as significant (x>0)]"
+		"(-h --incE)--incT=[consider sequences >= this score threshold as significant]"
+		"(-h --cut_nc --cut_tc)--cut_ga[use profile's GA gathering cutoffs to set all thresholding]"
+		"(-h --cut_ga --cut_tc)--cut_nc[use profile's NC noise cutoffs to set all thresholding]"
+		"(-h --cut_ga --cut_nc)--cut_tc[use profile's TC trusted cutoffs to set all thresholding]"
+		"(-h)--max[Turn all heuristic filters off (less speed, more power)]"
+		"(-h)--F1+[Stage 1 (SSV) threshold: promote hits w/ P <= F1]:number:"
+		"(-h)--F2+[Stage 2 (Vit) threshold: promote hits w/ P <= F2]:number:"
+		"(-h)--F3+[Stage 3 (Fwd) threshold: promote hits w/ P <= F3]:number:"
+		"(-h)--nobias[turn off composition bias filter]"
+		"(-h --rna)--dna[input alignment is DNA sequence data]"
+		"(-h --dna)--rna[input alignment is RNA sequence data]"
+		"(-h)--seed_max_depth=[seed length at which bit threshold must be met]:number:"
+		"(-h)--seed_sc_thresh=[Default req. score for FM seed (bits)]:number:"
+		"(-h)--seed_sc_density=[seed must maintain this bit density from one of two ends]:number:"
+		"(-h)--seed_drop_max_len=[maximum run length with score under (max - fm_drop_lim)]:number:"
+		"(-h)--seed_drop_lim=[in seed, max drop in a run of length]:number:"
+		"(-h)--seed_req_pos=[minimum number consecutive positive scores in seed]:number:"
+		"(-h)--seed_consens_match=[consecutive matches to consensus will override score threshold]:number:"
+		"(-h)--seed_ssv_length=[length of window around FM seed to get full SSV diagonal]:number:"
+		"(-h)--tformat=[assert target is in format <s>]:format:"
+		"(-h)--qformat=[assert query is in format <s>]:format:"
+		"(-h)--nonull2[turn off biased composition score corrections]"
+		"(-h)-Z+[set database size (Megabases) to <x> for E-value calculations (x>0)]:size:"
+		"(-h)--seed=[set RNG seed to <n> (if 0: one-time arbitrary seed, n>=0)]:seed:"
+		"(-h)--w_beta=[tail mass at which window length is determined]:number:"
+		"(-h)--w_length=[window length - essentially max expected hit length]:number:"
+		"(-h)--block_length=[length of blocks read from target database (threaded, n>=50000)]:number:"
+		"(-h --bottomonly)--toponly[only search the top strand]"
+		"(-h --toponly)--bottomonly[only search the bottom strand]"
+		"(-h)--cpu=[number of parallel CPU workers to use for multithreads (n>=0)]:number:"
+	)
+	_arguments -s -w -S $args[@] && ret=0
+	return ret
+}
+
+_nhmmer
