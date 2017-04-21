@@ -1,0 +1,66 @@
+#compdef belvu
+
+_belvu() {
+	integer ret=1
+	local info="-h --help --version --compiled"
+	local -a args
+	args+=(
+		"*:file:_files"
+		"(- *)"{-h,--help}"[Show help information]"
+		"(- *)--compiled[Show package compile date]"
+		"(- *)--version[Show package version number]"
+		"($info)-a[Show alignment annotations on screen]"
+		"($info)-b+[Apply boostrap analysis with <n> bootstrap samples]:number:"
+		"($info)-B[Print out bootstrap trees and exit]"
+		"($info)-C[Don't write coordinates to saved file]"
+		"($info)-c[Print Conservation table]"
+		"($info)-G[Penalize gaps in pairwise comparisons]"
+		"($info)-i[Ignore gaps in conservation calculation]"
+		"($info)-L+[Load markup and organism color code file]:file:_files"
+		"($info)-l+[Load residue color code file]:file:_files"
+		"($info)-m+[Read file with matching sequences segments]:file:_files"
+		"($info)-n+[Make non-redundant to <cutoff> %identity at startup]:number:"
+		"($info)-O+[Read organism info after this label]:string:"
+		"($info)-o+[Write alignment or tree to stdout in this format]:format:(Mul Selex MSF FastaAlign Fasta tree)"
+		"($info)-p[Output random model probabilites for HMMER]"
+		"($info)-P[Remove partial sequences at startup]"
+		"($info)-Q+[Remove columns more gappy than <cutoff>]:number:"
+		"($info)-q+[Remove sequences more gappy than <cutoff>]:number:"
+		"($info)-R[Do not parse coordinates when reading alignment]"
+		"($info)-r[Read alignment in 'raw' format (Name sequence)]"
+		"($info)-s+[Read in file of scores]:file:_files"
+		"($info)-t+[Set window title]:string:"
+		"($info)-u[Start up with uncoloured alignment (faster)]"
+		"($info)-X+[Print UPGMA-based subfamilies at cutoff]:cutoff:"
+		"($info)-z+[Separator char between name and coordinates]:char:"
+		"($info)-S+[Sort sequences in this order]:order:((
+			a\:alphabetically
+			o\:by\ Swissprot\ organism,\ alphabetically
+			s\:by\ score
+			n\:by\ Neighbor-joining\ tree
+			u\:by\ UPGMA\ tree
+			S\:by\ similarity\ to\ first\ sequence
+			i\:by\ identity\ to\ first\ sequence
+		))"
+		"($info)-T+[Tree options]:method:((
+			I\:Start\ up\ showing\ only\ tree
+			R\:Read\ distance\ matrix\ instead\ of\ alignment
+			b\:Use\ Scoredist\ distance\ correction\ \(default\)
+			c\:Don\'t\ color\ tree\ by\ organism
+			d\:Show\ distances\ in\ tree
+			i\:Start\ up\ showing\ tree
+			j\:Use\ Jukes-Cantor\ distance\ correction
+			k\:Use\ Kimura\ distance\ correction
+			n\:Neighbor\-joining
+			o\:Don\'t\ display\ sequence\ coordinates\ in\ tree
+			p\:Print\ distance\ matrix\ and\ exit
+			r\:Use\ uncorrected\ distances
+			s\:Use\ Storm\ \&\ Sonnhammer\ distance\ correction
+			u\:UPGMA
+		))"
+	)
+	_arguments -w -s -S $args[@] && ret=0
+	return ret
+}
+
+_belvu
