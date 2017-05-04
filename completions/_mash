@@ -1,0 +1,130 @@
+#compdef mash
+
+_mash-bounds() {
+	integer ret=1
+	local -a args
+	args+=(
+		"1: :"
+		"(- *)-h[print help]"
+		"(-h)-k[k-mer size (1-32, default: 21)]:int:"
+		"(-h)-p[limit error bounds of distance estimates]:probability:"
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_mash-dist() {
+	integer ret=1
+	local -a args
+	args+=(
+		"1: :"
+		"(- *)-h[Help]"
+		"(-h)-p[Parallelism. This many threads will be spawned for processing]:int:"
+		"(-h)-l[List input]"
+		"(-h)-t[Table output]"
+		"(-h)-v[Maximum p-value to report]:num:"
+		"(-h)-d[Maximum distance to report]:num:"
+		"(-h)-k[K-mer size (1-32, default: 21)]:int:"
+		"(-h)-s[Sketch size]:int:"
+		"(-h -r)-i[Sketch individual sequences rather than whole files]"
+		"(-h)-w[Probability threashold for warning about low k-mer size]:num:"
+		"(-h -i)-r[Input is a read set]"
+		"(-h -r)-b[Use a Bloom filter of this size to filter out unique k-mers]:size:"
+		"(-h -r)-m[Minimum copies of each k-mer required to pass noise filter for reads]:int:"
+		"(-h -r)-c[Target coverage]:num:"
+		"(-h -r)-g[Genome size]:size:"
+		"(-h)-n[Preserve strand]"
+		"(-h -n -k)-a[Use amino acid alphabet]"
+		"(-h -n)-z[Alphabet to base hashes on]:string:"
+		"(-h)-Z[Preserve case in k-mers and alphabet]"
+		'*:file:_files'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_mash-info() {
+	integer ret=1
+	local -a args
+	args+=(
+		"1: :"
+		"(- *)-h[Help]"
+		"(-)-H[Only show header info]"
+		"(-)-t[Tabular output (rather than padded), with no header]"
+		"(-)-c[Show hash count histograms for each sketch]"
+		'*:file:_files'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_mash-paste() {
+	integer ret=1
+	local -a args
+	args+=(
+		"1: :"
+		"(- *)-h[Help]"
+		"(-)-l[Input files are lists of file names]"
+		'*:file:_files'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_mash-sketch() {
+	integer ret=1
+	local -a args
+	args+=(
+		"1: :"
+		"(-h)-p[Parallelism. This many threads will be spawned for processing]:int:"
+		"(-h)-l[List input]"
+		"(-h)-o[Output prefix]:string:"
+		"(-h)-k[K-mer size (1-32, default: 21)]:int:"
+		"(-h)-s[Sketch size]:int:"
+		"(-h -r)-i[Sketch individual sequences rather than whole files]"
+		"(-h)-w[Probability threashold for warning about low k-mer size]:num:"
+		"(-h -i)-r[Input is a read set]"
+		"(-h -r)-b[Use a Bloom filter of this size to filter out unique k-mers]:size:"
+		"(-h -r)-m[Minimum copies of each k-mer required to pass noise filter for reads]:int:"
+		"(-h -r)-c[Target coverage]:num:"
+		"(-h -r)-g[Genome size]:size:"
+		"(-h)-n[Preserve strand]"
+		"(-h -n -k)-a[Use amino acid alphabet]"
+		"(-h -n)-z[Alphabet to base hashes on]:string:"
+		"(-h)-Z[Preserve case in k-mers and alphabet]"
+		'*:file:_files'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_mash() {
+	local ret=1
+	local -a args
+	if ((CURRENT == 2)); then
+		# complete args and commands
+		args+=(
+			'(- *)--license[print license and copyright information]'
+			# '(- *)--help[print help]'
+		)
+
+		_arguments -w -s -S $args[@]
+		_describe 'mash command' '(
+			bounds\:Print\ a\ table\ of\ Mash\ error\ bounds
+			dist\:Estimate\ the\ distance\ of\ query\ sequences\ to\ references
+			info\:Display\ information\ about\ sketch\ files
+			paste\:Create\ a\ single\ sketch\ file\ from\ multiple\ sketch\ files
+			sketch\:Create\ sketches\ \(reduced\ representations\ for\ fast\ operations\)
+		)'
+		ret=0
+	else
+		# delegate to sub commands
+		local subcmd=_mash-$words[2]
+		if ! _call_function ret $subcmd ; then
+			_message "unknown sub-command: $words[1]"
+		fi
+	fi
+	return ret
+}
+
+_mash
