@@ -1,0 +1,19 @@
+#compdef MEGAN
+
+_MEGAN () {
+	local ret=1
+	local -a args
+	args+=(
+		'(-f --files)'{-f,--files}'[MEGAN RMA file(s) to open]:file:_files'
+		'(-p --propertiesFile)'{-p,--propertiesFile}'[Properties file]:file:_files'
+		'(+w --hideMessageWindow)'{\+w,--hideMessageWindow}'[Hide message window]'
+		'(-S --silentMode)'{-S,--silentMode}'[Silent mode]'
+		'(-d --debug)'{-d,--debug}'[Debug mode]'
+		'(-v --verbose)'{-v,--verbose}'[Echo commandline options and be verbose]'
+		'(-)'{-h,--help}'[Show program usage and quit]'
+	)
+	_arguments $args[@] '*:file:_files' && ret=0
+	return 0
+}
+
+_MEGAN
