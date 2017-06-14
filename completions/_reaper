@@ -1,0 +1,48 @@
+#compdef reaper
+
+_reaper() {
+   integer ret=1
+   local -a args
+   args+=(
+      '--bcq-early[perform early B quality filtering]'
+      '--bcq-late[perform late B quality filtering]'
+      '--fasta-in[read FASTA input]'
+      '--full-length[only allow reads not shortened in any filter step]'
+      '--keep-all[delete rather than discard reads]'
+      '--noqc[do not output quality report files]'
+      '--nozip[do not output gzipped files]'
+      '-3p-barcode:params:'
+      '-3p-global:params:'
+      '-3p-head-to-tail[minimal trailing perfect match length]:l:'
+      '-3p-prefix:params:'
+      '-3pqa[three prime adaptor]:str:'
+      '-5p-barcode:params:'
+      '-5p-sinsert:params:'
+      '-5psi[five prime sequence insert]:str:'
+      '-basename[output basename]:prefix:'
+      '-clean-length[minimum allowed clean length]:int:'
+      '-debug[enable debug mode]:a=alignments c=clean l=lint:'
+      '-dust-suffix[dust theshold for read suffix]:threshold:'
+      '-format-clean[output for clean reads]:str:'
+      '-format-lint[output for filtered reads]:str:'
+      '-geom[geometry mode]:mode:(no\-bc 3p\-bc 5p\-bc)'
+      '-i[input stream]:file:_files'
+      '-meta[file with geometry-dependent format]:file:_files'
+      '-mr-tabu:params:'
+      '-nnn-check[disregard read onwards from seeing <count> N'"'"'s in <outof> bases]:count/outof:'
+      '-polya[remove trailing As if length exceeds int]:int:'
+      '-qqq-check[cut sequence]:val/winlen/winofs/readofs:'
+      '-record-format2[simple line formats]:str:'
+      '-record-format[record description]:str:'
+      '-sample[if debug, sample every clean/lint read]:c/l:(c l)'
+      '-sc-max[threshold for complexity of suffix following prefix match]:num:'
+      '-swp[alignment parameters]:match/substitution/gap:'
+      '-tabu[tabu sequence]:str:'
+      '-tri[filter out reads with tri-nt score > threshold]:threshold:'
+      '-trim-length[cut reads back to length NUM]:num:'
+   )
+   _arguments $args[@] '*:file:_files' && ret=0
+   return ret
+}
+
+_reaper
