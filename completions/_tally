@@ -1,0 +1,43 @@
+#compdef tally
+
+
+_freebayes() {
+    integer ret=1
+    local -a args
+    args+=(
+        '(--no-auto)--peek[peek in input file and output estimated memory parameters]'
+        '(--peek)--no-auto[do not peek in input file and set memory parameters automatically]'
+        '(-format)--fasta-out[write FASTA format]'
+        '(-record-format)--fasta-in[expect FASTA format]'
+        '(-record-format)--fastax-in[expect reaper --fastax-out format]'
+        '(-record-format)--fastqx-in[expect reaper --fastqx-out format]'
+        '--cx[do not compress sequence]'
+        '--no-tally[reads are output as they are processed]'
+        '--noput[do not output uniquified sequences]'
+        '--pair-by-offset[assume the -i and -j input files match record-by-record]'
+        '--unsorted[do not sort output sequences]'
+        '--with-quality[pass quality scores along, collate by taking per-base max]'
+        '-ds[k in 14..31 specifies storage size 2 ** k]:k:'
+        '-dsd[increase or decrease data size relative to default]:num:'
+        '-dsi[same as -si but after uniquifying]:num:'
+        '-f[second paired end input stream]:file:_files'
+        '-format[output format specification]:str:'
+        '-hs[k in 14..32 specifies hash size 2 ** k]:k:'
+        '-hsd[increase or decrease hash size relative to default]:num:'
+        '-i[input stream]:file:_files'
+        '-l[require read length >= num]:num:'
+        '-o[gzipped output stream]:file:_files'
+        '-p[second output stream for second paired end]:file:_files'
+        '-record-format[specify input format]:str:'
+        '-si[strip bases from start of read before uniquifying]:num:'
+        '-sumstat[output file with counts of discarded categories]:file:_files'
+        '-tri[require tri-nucleotide score <= num]:num:'
+        '-u[require read length <= num]:num:'
+        '-v[turn on verbosity settings]:param:(work cmp)'
+        '-zip-factor[set compression factor]:num:'
+    )
+    _arguments $args[@] '*:file:_files' && ret=0
+    return ret
+}
+
+_freebayes
