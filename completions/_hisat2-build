@@ -1,0 +1,36 @@
+#compdef hisat2-build
+
+_hisat2-build() {
+    integer ret=1
+    local I="-h --help --version --usage"
+    local -a args
+    args+=(
+        "(- *)"{-h,--help,--usage}'[print usage message]'
+        "(- *)--version[print version information and quit]"
+        "($I)-c[reference sequences given on cmd line]"
+        "($I)--large-index[force generated index to be 'large']"
+        "($I -a --noauto)"{-a,--noauto}'[disable automatic -p/--bmax/--dcv memory-fitting]'
+        "($I)-p+[number of threads]:num:"
+        "($I)--bmax=[max bucket size for blockwise suffix-array builder]:num:"
+        "($I)--bmaxdivn=[max bucket size as divisor of ref len (default: 4)]:num:"
+        "($I)--dcv=[diff-cover period for blockwise (default: 1024)]:num:"
+        "($I)--nodc[disable diff-cover (algorithm becomes quadratic)]"
+        "($I -r --noref -3 --justref)"{-r,--noref}'[do not build .3/.4.ht2 (packed reference) portion]'
+        "($I -r --noref -3 --justref)"{-3,--justref}'[just build .3/.4.ht2 (packed reference) portion]'
+        "($I -o --offrate)"{-o+,--offrate=}"[SA is sampled every 2^offRate BWT chars (default: 5)]:num:"
+        "($I -t --ftabchars)"{-t+,--ftabchars=}"[num of chars consumed in initial lookup (default: 10)]:num:"
+        "($I)--localoffrate=[SA (local) is sampled every 2^offRate BWT chars (default: 3)]:int:"
+        "($I)--localftabchars=[# of chars consumed in initial lookup in a local index (default: 6)]:int:"
+        "($I)--snp=[SNP file name]:file:_files"
+        "($I)--haplotype=[haplotype file name]:file:_files"
+        "($I)--ss=[Splice site file name]:file:_files"
+        "($I)--exon=[Exon file name]:file:_files"
+        "($I)--seed=[seed for random number generator]:int:"
+        "($I -q --quiet)"{-q,--quiet}"[disable verbose output]"
+
+    )
+    _arguments -s -w -S $args[@] '*:file:_files' && ret=0
+    return ret
+}
+
+_hisat2-build
