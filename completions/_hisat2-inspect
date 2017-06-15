@@ -1,0 +1,24 @@
+#compdef hisat2-inspect
+
+_hisat2-inspect() {
+    integer ret=1
+    local I="-h --help --usage"
+    local -a args
+    args+=(
+        "(- *)"{-h,--help,--usage}'[print usage message]'
+        "($I)--large-index[force inspection of the 'large' index]"
+        "($I -a --across)"{-a+,--across=}'[Number of characters across in FASTA output]'
+        "($I -s --summary)"{-s,--summary}'[Print summary incl. ref names, lengths, index properties]'
+        "($I -n --names)"{-n,--names}'[Print reference sequence names only]'
+        "($I)--snp[Print SNPs]"
+        "($I)--ss[Print splice sites]"
+        "($I)--ss-all[Print splice sites including those not in the global index]"
+        "($I)--exon[Print exons]"
+        "($I -e --ht2-ref)"{-e,--ht2-ref}'[Reconstruct reference from .ht2 (slow, preserves colors)]'
+        "($I -v --verbose)"{-v,--verbose}'[Verbose output (for debugging)]'
+    )
+    _arguments -s -w -S $args[@] '*:file:_files -g \*.ht2' && ret=0
+    return ret
+}
+
+_hisat2-inspect
