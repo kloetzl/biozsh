@@ -1,0 +1,91 @@
+#compdef delly
+
+# fails if defined as local
+ignore="-? --help"
+
+_delly-call() {
+	local -a args
+	args+=(
+		"1: :"
+		'(- *)'{-?,--help}'[show help message]'
+		"($ignore -t --type)"{-t,--type}'[SV type]:arg:(DEL DUP  INV BND INS)'
+		"($ignore -g --genome)"{-g,--genome}'[genome fasta file]:file:_files'
+		"($ignore -x --exclude)"{-x,--exclude}'[file with regions to exclude]:file:_files'
+		"($ignore -o --outfile)"{-o,--outfile}'[SV BCF output file]:file:_files'
+		"($ignore -q --map-qual)"{-q,--map-qual}'[min. paired-end mapping quality]:arg:'
+		"($ignore -s --mad-cutoff)"{-s,--mad-cutoff}'[insert size cutoff, median+s*MAD (deletions only)]:arg:'
+		"($ignore -n --noindels)"{-n,--noindels}'[no small InDel calling]'
+		"($ignore -v --vcffile)"{-v,--vcffile}"[input VCF/BCF file for re-genotyping]:file:_files"
+		"($ignore -u --geno-qual)"{-u,--geno-qual}"[min. mapping quality for genotyping]:arg:"
+	)
+	_arguments $args[@] '*:file:_files -g \*.bam'
+}
+
+_delly-merge() {
+	local -a args
+	args+=(
+		"1: :"
+		'(- *)'{-?,--help}'[show help message]'
+		"($ignore -t --type)"{-t,--type}'[SV type]:arg:(DEL DUP  INV BND INS)'
+		"($ignore -o --outfile)"{-o,--outfile}'[Merged SV BCF output file]:file:_files -g \*.bcf'
+		"($ignore -m --minsize)"{-m,--minsize}'[min. SV size]:arg:'
+		"($ignore -n --maxsize)"{-n,--maxsize}'[max. SV size]:arg:'
+		"($ignore -c --precise)"{-c,--precise}'[Filter sites for PRECISE]'
+		"($ignore -p --pass)"{-p,--pass}'[Filter sites for PASS]'
+		"($ignore -b --bp-offset)"{-b,--bp-offset}"[max. breakpoint offset]:arg:"
+		"($ignore -r --rec-overlap)"{-r,--rec-overlap}"[min. reciprocal overlap]:arg:"
+	)
+	_arguments $args[@] '*:file:_files -g \*.bcf'
+}
+
+_delly-filter() {
+	local -a args
+	args+=(
+		"1: :"
+		'(- *)'{-?,--help}'[show help message]'
+		"($ignore -t --type)"{-t,--type}'[SV type]:arg:(DEL DUP  INV BND INS)'
+		"($ignore -o --outfile)"{-o,--outfile}'[Merged SV BCF output file]:file:_files -g \*.bcf'
+		"($ignore -m --minsize)"{-m,--minsize}'[min. SV size]:arg:'
+		"($ignore -n --maxsize)"{-n,--maxsize}'[max. SV size]:arg:'
+		"($ignore -p --pass)"{-p,--pass}'[Filter sites for PASS]'
+		"($ignore -a --altaf)"{-a,--altaf}'[min. fractional ALT support]:arg:'
+		"($ignore -r --ratiogeno)"{-r,--ratiogeno}'[min. fraction of genotyped samples]:arg:'
+		"($ignore -s --samples)"{-s,--samples}'[Two-column sample file listing sample name and tumor or control]:file:_files'
+		"($ignore -v --coverage)"{-v,--coverage}'[min. coverage in tumor]:arg:'
+		"($ignore -c --controlcontamination)"{-c,--controlcontamination}'[max. fractional ALT support in control]:arg:'
+		"($ignore -q --gq)"{-q,--gq}'[min. median GQ for carriers and non-carriers]:arg:'
+		"($ignore -e --rddel)"{-e,--rddel}'[max. read-depth ratio of carrier vs. non-carrier for a deletion]:arg:'
+		"($ignore -u --rddup)"{-u,--rddup}'[min. read-depth ratio of carrier vs. non-carrier for a duplication]:arg:'
+	)
+	_arguments $args[@] '*:file:_files -g \*.bcf'
+}
+
+_delly() {
+	local ret=1
+	local -a args
+	if ((CURRENT == 2)); then
+		# complete args and commands
+		args+=(
+			'(- *)--help[print help]'
+			'(- *)-l[license details]'
+			'(- *)-w[warranty details]'
+		)
+
+		_arguments $args[@]
+		_describe 'delly command' '(
+			call:discover\ and\ genotype\ structural\ variants
+			merge:merge\ structural\ variants
+			filter:filter\ somatic\ or\ germline\ structural\ variants
+		)'
+		ret=0
+	else
+		# delegate to sub commands
+		local subcmd=_delly-$words[2]
+		if ! _call_function ret $subcmd ; then
+			_message "unknown sub-command: $words[1]"
+		fi
+	fi
+	return ret
+}
+
+_delly
