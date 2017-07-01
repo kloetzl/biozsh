@@ -21,7 +21,8 @@ _mat-format() {
 		"($ignore)--format=[the format string]:str:"
 		"($ignore)--precision=[precision to use in comparisons]:float:"
 		"($ignore)--separator=[the cell separator]:char:"
-		"($ignore)--sort[sort by name]"
+		"($ignore -s --sort)"{-s,--sort}"[sort by name]"
+		"($ignore)--truncate-names[truncate names to ten characters]"
 		"($ignore -v --validate -f --fix)"{-v,--validate}'[validate for correctness]'
 		'(- *)'{-h,--help}'[print help]'
 	)
@@ -46,6 +47,7 @@ _mat-nj() {
 	args+=(
 		"1: :"
 		'(- *)'{-h,--help}'[print help]'
+		"($ignore)--no-support[do not compute support values]"
 	)
 	_arguments -w -s -S $args[@] '*:file:_files'
 }
