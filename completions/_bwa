@@ -49,7 +49,7 @@ _bwa-bwasw() {
 		'*:query:_files'
 		'-a+[score for a match (default: 1)]:int:'
 		'-b+[mismatch penalty (default: 3)]:int:'
-		'-c+[coefficient of length-threshold adjustment [5.5]]:float:'
+		'-c+[coefficient of length-threshold adjustment (default: 5.5)]:float:'
 		'-C[copy FASTA/Q comment to SAM output]'
 		'-f+[file to output results to instead of stdout]:file:_files'
 		'-G+[maximum gap size during chaining (default: 10000)]:int:'
