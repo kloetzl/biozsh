@@ -1,4 +1,8 @@
 #!/usr/bin/zsh
 
-# Make figtree read from stdin in pipelines
-figtree =( cat $*)
+# Make figtree read from stdin in pipelines if no arg was given
+if [[ $# -ne 0 ]]; then
+	figtree "$@"
+else
+	figtree =(cat -)
+fi
