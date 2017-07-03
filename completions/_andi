@@ -7,16 +7,18 @@
 # The B part performs brace expansion as on the commandline. Thus each
 # line with braces gets translated into multiple arguments! Also the
 # B part lists the relevant argument for which we are trying to set
-# the completion rules. The A part simply states that A shall not be
-# completed if B is already present. i.e. Most flags only make sense once,
+# the completion rules. The A part simply states that B shall not be
+# completed if A is already present. i.e. Most flags only make sense once,
 # with the exception of -v. The string C is simply the message that is
 # displayed to the user.
 
 local info="-h --help --version"
-local args ret=1
+local ret=1
+local -a args
 
 args+=(
 	"($info -b --bootstrap)"{-b+,--bootstrap=}'[Print additional bootstrap matrices]:int:'
+	"($info)*--file-of-filenames=[Read additional filenames from file; one per line]:file:_files"
 	"($info -j --join)"{-j,--join}'[Treat all sequences from one file as a single genome]'
 	"($info -l --low-memory)"{-l,--low-memory}'[Use less memory at the cost of speed]'
 	"($info -m --model)"{-m+,--model=}'[Pick an evolutionary model]:model:((
@@ -24,9 +26,10 @@ args+=(
 		JC\:Jukes\-Cantor\ corrected
 		Kimura\:Kimura\-two\-parameter
 	))'
-	"($info)-p+[Significance of an anchor pair; default\: 0.05]:float:"
+	"($info)-p+[Significance of an anchor; default\: 0.025]:float:"
+	"($info -t --threads)"{-t+,--threads=}'[The number of threads to be used; by default, all available processors are used]:num_threads:'
+	"($info)--truncate-names[Print only the first ten characters of each name]"
 	"($info)*"{-v,--verbose}'[Prints additional information]'
-	'($info -t --threads)'{-t+,--threads=}'[The number of threads to be used; by default, all available processors are used]:num_threads:'
 	'(- *)'{-h,--help}'[Display help and exit]'
 	'(- *)--version[Output version information and acknowledgments]'
 	'*:file:_files'
