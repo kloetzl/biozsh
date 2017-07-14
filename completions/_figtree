@@ -1,0 +1,14 @@
+#compdef figtree
+
+local -a args
+
+args+=(
+  '(- *)-help[print help message]'
+  '(-help)-graphic[produce a graphic with the given format]:format:(PDF SVG PNG JPEG)'
+  '(-help)-height[the height of the graphic in pixels]:num:'
+  '(-help)-width[the width of the graphic in pixels]:num:'
+  '(-help)-url[the input file is a URL]'
+  '*::file:_files'
+)
+
+_arguments $args[@]
