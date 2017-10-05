@@ -27,7 +27,8 @@ _mash-dist() {
 		"(-h)-k[K-mer size (1-32, default: 21)]:int:"
 		"(-h)-s[Sketch size]:int:"
 		"(-h -r)-i[Sketch individual sequences rather than whole files]"
-		"(-h)-w[Probability threashold for warning about low k-mer size]:num:"
+		"(-h)-S[Seed to provide to the hash function]:int:"
+		"(-h)-w[Probability threshold for warning about low k-mer size]:num:"
 		"(-h -i)-r[Input is a read set]"
 		"(-h -r)-b[Use a Bloom filter of this size to filter out unique k-mers]:size:"
 		"(-h -r)-m[Minimum copies of each k-mer required to pass noise filter for reads]:int:"
@@ -52,6 +53,7 @@ _mash-info() {
 		"(-)-H[Only show header info]"
 		"(-)-t[Tabular output (rather than padded), with no header]"
 		"(-)-c[Show hash count histograms for each sketch]"
+		"(-)-d[Dump sketches in JSON format]"
 		'*:file:_files'
 	)
 	_arguments $args[@] && ret=0
@@ -71,6 +73,22 @@ _mash-paste() {
 	return ret
 }
 
+_mash-screen() {
+	integer ret=1
+	local -a args
+	args+=(
+		"1: :"
+		"(- *)-h[Help]"
+		"(-h)-p[Parallelism. This many threads will be spawned for processing]:int:"
+		"(-h)-w[Winner-takes-all strategy for identity estimates]"
+		"(-h)-i[Minimum identity to report]:num:"
+		"(-h)-v[Maximum p-value to report]:num:"
+		'*:file:_files'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
 _mash-sketch() {
 	integer ret=1
 	local -a args
@@ -82,7 +100,8 @@ _mash-sketch() {
 		"(-h)-k[K-mer size (1-32, default: 21)]:int:"
 		"(-h)-s[Sketch size]:int:"
 		"(-h -r)-i[Sketch individual sequences rather than whole files]"
-		"(-h)-w[Probability threashold for warning about low k-mer size]:num:"
+		"(-h)-S[Seed to provide to the hash function]:int:"
+		"(-h)-w[Probability threshold for warning about low k-mer size]:num:"
 		"(-h -i)-r[Input is a read set]"
 		"(-h -r)-b[Use a Bloom filter of this size to filter out unique k-mers]:size:"
 		"(-h -r)-m[Minimum copies of each k-mer required to pass noise filter for reads]:int:"
@@ -114,6 +133,7 @@ _mash() {
 			dist\:Estimate\ the\ distance\ of\ query\ sequences\ to\ references
 			info\:Display\ information\ about\ sketch\ files
 			paste\:Create\ a\ single\ sketch\ file\ from\ multiple\ sketch\ files
+			screen\:Determine\ whether\ query\ sequences\ are\ within\ a\ larger\ pool\ of\ sequences
 			sketch\:Create\ sketches\ \(reduced\ representations\ for\ fast\ operations\)
 		)'
 		ret=0
