@@ -1,8 +1,11 @@
 #/usr/bin/zsh
 
+# determine biozsh directory
+BIOZSH_DIR="${funcsourcetrace[1]%/*}"
+
 # add completions
-fpath+=($PWD/completions)
+fpath+=("${BIOZSH_DIR}/completions")
 compinit
 
 # initialise wrappers
-alias figtree="$PWD/wrappers/figtree"
+alias figtree="${BIOZSH_DIR}/wrappers/figtree"
