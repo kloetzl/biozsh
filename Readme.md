@@ -5,12 +5,11 @@ The command line is the usual working environment in bioinformatics. This reposi
 
 ## Installation
 
-`biozsh` should be able to be installed using one of the ZSH package managers,
-e.g. [`zgen`](https://github.com/tarjoilija/zgen). Just add the following to
-your zshrc, before `zgen save`:
+`biozsh` should be able to be installed using one of the ZSH package managers of your choice. See these links for detailed installation instructions.
 
-    zgen load kloetzl/biozsh
-
+ - [antigen](https://github.com/kloetzl/biozsh/issues/2)
+ - [oh-my-zsh](https://github.com/kloetzl/biozsh/issues/4)
+ - [zgen](https://github.com/kloetzl/biozsh/pull/1)
 
 ### Manual installation
 
@@ -20,12 +19,12 @@ I still have to figure out, how to do a proper installation. But this should wor
     cd biozsh
     make install-dev
 
-Restarting the shell will give you access to the new features.
+Restarting the shell will give you access to the new features. If you want to manually source the `biozsh.zsh` script, note that you have to do so with the *absolute* path.
 
 
 ## Usage
 
-Depending on your ZSH style using the auto completion is as simple as pressing TAB. Here is what it looks like for me if I press TAB, just after typing `blastn -db`.
+Depending on your ZSH style, using the auto completion is as simple as pressing TAB. Here is what it looks like for me if I press TAB, just after typing `blastn -db`.
 
 ![blastn -db completion](https://github.com/kloetzl/biozsh/raw/master/blastn1.png)
 
