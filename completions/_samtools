@@ -267,66 +267,10 @@ _samtools() {
 		return ret
 	else
 		# delegate to sub commands
-		local subcmd=$words[2]
-		case $subcmd in
-			bamshuf)
-				_samtools-bamshuf && ret=0
-				;;
-			bedcov)
-				_samtools-bedcov && ret=0
-				;;
-			calmd)
-				_samtools-calmd && ret=0
-				;;
-			cat)
-				_samtools-cat && ret=0
-				;;
-			depth)
-				_samtools-depth && ret=0
-				;;
-			faidx)
-				_samtools-faidx && ret=0
-				;;
-			fixmate)
-				_samtools-fixmate && ret=0
-				;;
-			flagstat)
-				_samtools-flagstat && ret=0
-				;;
-			idxstats)
-				_samtools-idxstats && ret=0
-				;;
-			index)
-				_samtools-index && ret=0
-				;;
-			merge)
-				_samtools-merge && ret=0
-				;;
-			mpileup)
-				_samtools-mpileup && ret=0
-				;;
-			phase)
-				_samtools-phase && ret=0
-				;;
-			reheader)
-				_samtools-reheader && ret=0
-				;;
-			rmdup)
-				_samtools-rmdup && ret=0
-				;;
-			sort)
-				_samtools-sort && ret=0
-				;;
-			targetcut)
-				_samtools-targetcut && ret=0
-				;;
-			tview)
-				_samtools-tview && ret=0
-				;;
-			view)
-				_samtools-view && ret=0
-				;;
-		esac
+		local subcmd=_samtools-$words[2]
+		if ! _call_function ret $subcmd ; then
+			_message "unknown sub-command: $words[1]"
+		fi
 		return ret
 	fi
 }
