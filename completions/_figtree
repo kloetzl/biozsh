@@ -8,7 +8,7 @@ args+=(
   '(-help)-height[the height of the graphic in pixels]:num:'
   '(-help)-width[the width of the graphic in pixels]:num:'
   '(-help)-url[the input file is a URL]'
-  '*::file:_files'
+  '(-)*::file:_files'
 )
 
 _arguments $args[@]
