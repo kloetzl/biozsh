@@ -34,10 +34,16 @@ Blastn supports a variety of different output format. Now you don't have to reme
 
 Checkout the [completions](completions) directory for all supported tools.
 
+### biozsh in action
+
+Follow this link to have a glimpse of the power of biozsh in action.
+
+[![asciicast](https://asciinema.org/a/155180.png)](https://asciinema.org/a/155180)
+
 
 ## License
 
-Copyright (c) 2017  Fabian Klötzl  
+Copyright (c) 2017 – 2018  Fabian Klötzl  
 MIT License, See [License](License) for details.
 
 Some files may be licensed differently.
