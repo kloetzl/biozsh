@@ -1,0 +1,85 @@
+#compdef blastp
+
+local args
+args+=(
+	'(-culling_limit)-best_hit_overhang[Best Hit algorithm overhang value]:float_value: '
+	'(-culling_limit)-best_hit_score_edge[Best Hit algorithm score edge value]:float_value: '
+	'(-best_hit_overhang -best_hit_score_edge)-culling_limit[Delete a hit that is enveloped by at least this many higher-scoring hits]:int_value: '
+	'-comp_based_stats[Use composition-based statistics]:string:((
+		d\:Default\ \(2\)
+		D\:Default\ \(2\)
+		0\:No\ composition\-based\ statistics
+		f\:No\ composition\-based\ statistics
+		F\:No\ composition\-based\ statistics
+		1\:Composition\-based\ statistics
+		2\:Conditioned\ on\ sequence\ properties
+		T\:Conditioned\ on\ sequence\ properties
+		t\:Conditioned\ on\ sequence\ properties
+		3\:Unconditioned
+	))'
+	'(-subject -subject_loc)-db[BLAST data base]:db_file:_files'
+	'(-db_soft_mask -subject -subject_loc)-db_hard_mask[Filtering algorithm ID to apply to the BLAST database as hard mask]:filtering_algorithm: '
+	'(-db_hard_mask -subject -subject_loc)-db_soft_mask[Filtering algorithm ID to apply to the BLAST database as soft mask]:filtering_algorithm: '
+	'-dbsize[Effective size of the database]:num_letters: '
+	'-entrez_query[Restrict search with the given Entrez query]:entrez_query: '
+	'-evalue[Expected Value (E) for saving hits]:evalue: '
+	'(-import_search_strategy)-export_search_strategy[Record search strategy to this file]:filename:_files'
+	'-gapextend[Cost to extend a gap]:extend_penalty: '
+	'-gapopen[Cost to open a gap]:open_penalty: '
+	'(-negative_gilist -remote -subject -subject_loc)-gilist[Restrict search of database to GI’s listed in this file]:filename:_files'
+	'(-h -help)'{-h,--help}'[Show help]'
+	'-html[Produce HTML output]'
+	'-import_search_strategy[Search strategy file to read]:filename:_files'
+	'-lcase_masking[Use lower case filtering in query and subject sequences]'
+	'-line_length[Line length for output]:line_length: '
+	'-max_hsps[Maximum number of HSPs to keep]:int_value: '
+	'(-num_alignments -num_descriptions)-max_target_seqs[Number of aligned sequences to keep]:num_sequences: '
+	'(-gilist -remote -subject -subject_loc)-negative_gilist[Restrict search of database to everything except the listed GIs]:filename:_files'
+	'(-max_target_seqs)-num_alignments[Show alignments for this number of database sequences]:int_value: '
+	'(-max_target_seqs)-num_descriptions[Show one-line descriptions for this number of database sequences]:int_value: '
+	'(-remote)-num_threads[Number of threads (CPUs) to use in blast search]:int_value: '
+	'-out[Output file name]:output_file:_files'
+	'-outfmt[Output format]:format:((
+		0\:pairwise
+		1\:query-anchored\ showing\ identities
+		2\:query-anchored\ no\ identities
+		3\:flat\ query-anchored,\ show\ identities
+		4\:flat\ query-anchored,\ no\ identities
+		5\:XML\ Blast\ output
+		6\:tabular
+		7\:tabular\ with\ comment\ lines
+		8\:Text\ ASN.1
+		9\:Binary\ ASN
+		10\:Comma-separated\ value
+		11\:BLAST\ archive\ format\ \(ASN.1\)
+		12\:Seqalign\ \(JSON\)
+		13\:Multiple\-file\ BLAST\ JSON
+		14\:Multiple\-file\ BLAST\ XML2
+		15\:Single\-file\ BLAST\ JSON
+		16\:Single\-file\ BLAST\ XML2
+		18\:Organism\ Report
+	))'
+	'-parse_deflines[Parse query and subject bar delimited sequence identifiers]'
+	'-query[Query file name]:input_file:_files'
+	'-query_loc[Location on the query sequence]:range: '
+	'(-gilist -negative_gilist -subject_loc -num_threads)-remote[Execute search on NCBI servers]'
+	'-reward[Scoring matrix name]:string'
+	'-searchsp[Effective length of the search space]:int_value: '
+	'-seg[Filter query sequence with SEG]:SEG_options: '
+	'-show_gis[Show NCBI GIs in report]'
+	'-soft_masking[Apply filtering locations as soft masks]:soft_masking: '
+	'(-db -gilist -negative_gilist -db_soft_mask -db_hard_mask)-subject[File with subject sequence(s) to search]:subject_input_file:_files'
+	'(-db -gilist -negative_gilist -db_soft_mask -db_hard_mask)-subject_loc[Location on the subject sequence]:range: '
+	'-task[Commonly performed tasks]:task_name:(blastp blastp-fast blastp-short)'
+	'-threshold[Minimum word score such that the word is added to the lookup table]:int_value'
+	'-ungapped[Perform ungapped alignment]'
+	'-use_sw_tback[Compute locally optimal Smith-Waterman alignments]'
+	'-version[Print version information]'
+	'-window_size[Multiple hits window size, use 0 to specify 1-hit algorithm]:int_value: '
+	'-word_size[Length of initial exact match]:int_value: '
+	'-xdrop_gap[Heuristic value for preliminary gapped extensions]:float_value: '
+	'-xdrop_gap_final[Heuristic value for final gapped alignment]:float_value: '
+	'-xdrop_ungap[Heuristic value for ungapped extensions]:float_value: '
+)
+
+_arguments $args[@]
