@@ -141,7 +141,7 @@ _mash() {
 		# delegate to sub commands
 		local subcmd=_mash-$words[2]
 		if ! _call_function ret $subcmd ; then
-			_message "unknown sub-command: $words[1]"
+			_message "unknown sub-command: $words[2]"
 		fi
 	fi
 	return ret
