@@ -1,0 +1,225 @@
+#compdef diamond
+
+# author: Joseph Lee
+# date: 20180712
+# diamond v0.9.22
+# diamond manual: https://github.com/bbuchfink/diamond/raw/master/diamond_manual.pdf
+
+__diamond-opt-output1() {
+    opt_output1=(
+        '(-o --out)'{-o,--out}'[Path to output file, if this parameter is omitted, the results will be written to the standard output]:file:_files'
+        '(-f --outfmt)'{-f,--outfmt}'[Format of the output file]:format:((
+            0\:BLAST\ pairwise\ format
+            5\:BLAST\ XML\ format
+            6\:BLAST\ tabular\ format\ \(default\)
+            100\:DIAMOND\ alignment\ archive\ \(DAA\)
+            101\:SAM\ format
+            102\:Taxonomic\ classification
+            103\:PAF\ format
+        ))'
+        '--compress[Enable compression of the output file (default=0)]:boolean:((
+            0\:no\ compression\ \(default\)
+            1\:gzip\ compression
+        ))'
+        '(-k --max-target-seqs)'{-k,--max-target-seqs}'[The maximum number of target sequences per query to report alignments for (default=25, set 0 to report all alignments)]:int:'
+        '--top[Report alignments within the given percentage range of the top alignment score for a query (overrides --max-target-seqs option)]:float:'
+    )
+}
+
+__diamond-opt-output2() {
+    opt_output2=(
+        '--salltitles[Include full length subject titles into the DAA format]'
+        '--sallseqid[Include all subject ids into the DAA file]'
+        '--range-culling[Restrict hit culling to overlapping query ranges (only available in frameshift alignment mode)]'
+        '(-e --evalue)'{-e,--evalue}'[Maximum expected value to report an alignment (default=0.001)]:float:'
+        '--min-score[Minimum bit score to report an alignment (overrides the --evalue parameter)]:int:'
+        '--id[Report only alignments above the given percentage of sequence identity]:float:'
+        '--query-cover[Report only alignments above the given percentage of query cover]:float:'
+        '--subject-cover[Report only alignments above the given percentage of subject cover]:float:'
+        '--max-hsps[The maximum number of HSPs per subject sequence to report for each query]:int:'
+        '--un[File for unaligned queries]:file:_files'
+        '--unal[Report unaligned queries (default=1 for the BLAST pairwise, BLAST XML and SAM format)]:boolean:((
+            0\:no
+            1\:yes
+        ))'
+        '--no-self-hits[Suppress reporting of identical self-hits between sequences]'
+    )
+}
+
+__diamond-opt-input(){
+    opt_input=(
+        '(-d --db)'{-d,--db}'[Path to the output DIAMOND database file]:file:_files'
+        '(-q -query)'{-q,--query}'[Path to the query input file in FASTA or FASTQ format (may be gzip compressed)]:file:_files'
+        '--taxonlist[Comma-separated list of NCBI taxonomic IDs to filter the database by]:list:'
+        '--query-gencode[Genetic code used for translation of query in BLASTX mode (default=standard code; note: changing the genetic code is currently not fully supported for the DAA format)]:int:'
+        '--strand[Set strand of query to align for translated searches (default=both)]:str:(both plus minus)'
+        '(-l --min-orf)'{-l,--min-orf}'[Ignore translated sequences that do not contain an open reading frame of at least this length (default=30, set 1 to disable)]:int:'
+        '(-t --tmpdir)'{-t,--tmpdir}'[Directory for temporary files]:file:_files'
+    )
+}
+
+__diamond-opt-alignment(){
+    opt_alignment=(
+        '--sensitive[This mode is a lot more sensitive that the default and generally recommended for aligning longer sequences]'
+        '--more-sensitive[This mode provides some additional sensitivity compared to the sensitive mode]'
+        '(-F --frameshift)'{-F,--frameshift}'[Penalty for frameshifts in DNA-vs-protein alignments. Values around 15 are reasonable for this parameter (default=disable)]:int:'
+        '--gapopen[Gap open penalty]:int:'
+        '--gapextend[Gap extension penalty]:int:'
+        '--matrix[Scoring matrix (default=BLOSUM62)]:matrix:(BLOSUM45 BLOSUM50 BLOSUM62 BLOSUM80 BLOSUM90 PAM250 PAM70 PAM30)'
+        '--comp-based-stats[Enable composition based statistics (default=1)]:boolean:((
+            0\:no\ score\ correction
+            1\:compositional\ bias\ correction
+        ))'
+        '--algo[Algorithm for seed search (default=auto)]:type:((
+            0\:double\-indexed
+            1\:query\-indexed
+        ))'
+        '(-b --block-size)'{-b,--block-size}'[Sequence block size in billions of letters (default=2.0)]:float:'
+        '--custom-matrix[File containing custom scoring matrix]:file:_files'
+        '--lambda[lambda parameter for custom matrix]::'
+        '--K[K parameter for custom matrix]::'
+        '--masking[Enable masking of low complexity regions (default=1)]:boolean:((
+            0\:disable
+            1\:enable\ \(default\)
+        ))'
+    )
+}
+
+__diamond-opt-general(){
+    opt_general=(
+        '(-p --threads)'{-p,--threads}'[Number of CPU threads (default=all)]:int:'
+        '(-v --verbose)'{-v,--verbose}'[Verbose console output]'
+        '--log[Enable debug log]'
+        '--quiet[Disable console output]'
+    )
+}
+
+_diamond-makedb() {
+    local ret=1
+    local -a args
+    local -a opt_general
+    __diamond-opt-general
+    args+=(
+        '1:command:'
+        '--in[Input reference file in FASTA format]:file:_files'
+        '(-d --db)'{-d,--db}'[Path to the output DIAMOND database file]:file:_files'
+        '--taxonmap[Path to mapping file that maps NCBI protein accession numbers to taxon ids (gzip com- pressed)]:file:_files'
+        '--taxonnodes[Path to the nodes.dmp file from the NCBI taxonomy]:file:_files'
+    )
+    _arguments $args[@] $opt_general[@] && ret=0
+    return ret
+}
+
+_diamond-blastp() {
+    local ret=1
+    local -a args
+    local -a opt_output1
+    local -a opt_output2
+    local -a opt_input
+    local -a opt_alignment
+    local -a opt_general
+    __diamond-opt-output1
+    __diamond-opt-output2
+    __diamond-opt-input
+    __diamond-opt-alignment
+    __diamond-opt-general
+    args+=(
+        '1:command:'
+    )
+    _arguments $args[@] $opt_output1[@] $opt_output2[@] $opt_input[@] $opt_alignment[@] $opt_general[@] && ret=0
+    return ret
+}
+
+_diamond-blastx() {
+    local ret=1
+    local -a args
+    local -a opt_output1
+    local -a opt_output2
+    local -a opt_input
+    local -a opt_alignment
+    local -a opt_general
+    __diamond-opt-output1
+    __diamond-opt-output2
+    __diamond-opt-input
+    __diamond-opt-alignment
+    __diamond-opt-general
+    args+=(
+        '1:command:'
+    )
+    _arguments $args[@] $opt_output1[@] $opt_output2[@] $opt_input[@] $opt_alignment[@] $opt_general[@] && ret=0
+    return ret
+}
+
+_diamond-view() {
+    local ret=1
+    local -a args
+    local -a opt_output1
+    local -a opt_general
+    __diamond-opt-output1
+    __diamond-opt-general
+    args+=(
+        '1:command:'
+        '(-a --daa)'{-a,--daa}'[Path to input file in DAA format]:file:_files'
+        '--forwardonly[Only show alignments of forward strand]'
+    )
+    _arguments $args[@] $opt_output1[@] $opt_general[@] && ret=0
+    return ret
+}
+
+_diamond-getseq() {
+    local ret=1
+    local -a args
+    local -a opt_general
+    __diamond-opt-general
+    args+=(
+        '1:command:'
+        '(-d --db)'{-d,--db}'[Path to the output DIAMOND database file]:file:_files'
+        '--seq[Sequence numbers to display]:int:'
+        '(-o --out)'{-o,--out}'[Path to output file, if this parameter is omitted, the results will be written to the standard output]:file:_files'
+    )
+    _arguments $args[@] $opt_general[@] && ret=0
+    return ret
+}
+
+_diamond-dbinfo() {
+    local ret=1
+    local -a args
+    local -a opt_general
+    __diamond-opt-general
+    args+=(
+        '1:command:'
+        '(-d --db)'{-d,--db}'[Path to the output DIAMOND database file]:file:_files'
+    )
+    _arguments $args[@] $opt_general[@] && ret=0
+    return ret
+}
+
+_diamond() {
+    local ret=1
+    local -a args
+    if (( CURRENT == 2 )); then
+        args+=(
+            '1:command:((
+                makedb:Build\ DIAMOND\ database\ from\ a\ FASTA\ file
+                blastp:Align\ amino\ acid\ query\ sequences\ against\ a\ protein\ reference\ database
+                blastx:Align\ DNA\ query\ sequences\ against\ a\ protein\ reference\ database
+                view:View\ DIAMOND\ alignment\ archive\ \(DAA\)\ formatted\ file
+                help:Produce\ help\ message
+                version:Display\ version\ information
+                getseq:Retrieve\ sequences\ from\ a\ DIAMOND\ database\ file
+                dbinfo:Print\ information\ about\ a\ DIAMOND\ database\ file
+            ))'
+        )
+        _arguments $args[@] && ret=0
+        return ret
+    else
+        # delegate to sub commands
+        local subcmd=_diamond-$words[2]
+        if ! _call_function ret $subcmd ; then
+            _message "unknown sub-command: $words[2]"
+        fi
+        return ret
+    fi
+}
+
+_diamond
