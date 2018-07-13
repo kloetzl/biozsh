@@ -45,6 +45,9 @@ _mafft() {
         '--tm[Transmembrane PAM number matrix is used]:number:'
         '--treeout[Guide tree is output to the input.tree file]'
         '--weighti[Weighting factor for the consistency term]:number:'
+        '--adjustdirection[Generate reverse complement sequences, as necessary, and align (based on 6 mer counting and faster)]'
+        '--adjustdirectionaccurately[Generate reverse complement sequences, as necessary, and align (based on DP and slower)]'
+        '--thread[Number of threads]:int:'
         '*:file:_files'
 	)
 	_arguments $args[@] && ret=0
