@@ -5,7 +5,7 @@
 
 
 
-_samtools-bamshuf() {
+_samtools-collate() {
 	local ret=1
 	local -a args
 	args+=(
@@ -102,7 +102,7 @@ _samtools-merge() {
 		'-1[compress level 1]'
 		'-@[number of BAM compression thread]:int:'
 		'-f[overwrite the output BAM if exist]'
-		'-h[copy the header in FILE to <out.bam>:FILE:_files'
+		'-h[copy the header in FILE to <out.bam>]:FILE:_files'
 		'-l+[compression level, from 0 to 9]:int:'
 		'-n[sort by read names]'
 		'-r[attach RG tag (inferred from file names)]'
@@ -162,7 +162,9 @@ _samtools-sort() {
 		'-l+[compression level, from 0 to 9 (default: -1)]:int:'
 		'-m+[max memory per thread; suffix K/M/G recognize (default: 768M)]:int:'
 		'-n[sort by read name]'
-		'-o[final output to stdout]'
+		'-t[sort by value of TAG, uses position as secondary index (or read name if -n is set)]:str:'
+		'-o+[write final output to FILE]:files:_files'
+		'-O+[output format]:str:(SAM BAM CRAM)'
 		'*:files:_files'
 	)
 	_arguments -w -s -S $args[@] && ret=0
@@ -212,23 +214,26 @@ _samtools-view() {
 		'-B[collapse the backward CIGAR operation]'
 		'-b[output BAM]'
 		'-c[print only the count of matching records]'
+		'-C[output CRAM (requires -T)]'
 		'-F+[filtering flag, 0 for unset (default: 0)]:int:'
 		'-f+[required flag, 0 for unset (default: 0)]:int:'
 		'-h[print header for the SAM output]'
 		'-H[print header only (no alignments)]'
 		'-l+[only output reads in library STR (default: null)]:str:'
 		'-L+[output alignments overlapping the input BED FILE (default: null)]:file:_files'
+		'-M[use the multi-region iterator]'
 		'-o+[output file name (default: stdout)]:file:_files'
+		'-O+[output format]:str:(SAM BAM CRAM)'
 		'-q+[minimum mapping quality (default: 0)]:int:'
 		'-R+[list of read groups to be outputted (default: null)]:file:_files'
 		'-r+[only output reads in read group STR (default: null)]:str:'
 		'-s+[fraction of templates to subsample; integer part as seed (default: -1)]:float:'
-		'-S[input is SAM]'
+		'-S[input format is auto-detected]'
 		'-t+[list of reference names and lengths (force -S) (default: null)]:file:_files'
-		'-T+[reference sequence file (force -S) (default: null)]:file:_files'
+		'-T+[reference sequence file (default: null)]:file:_files'
 		'-u[uncompressed BAM output (force -b)]'
-		'-x[output FLAG in HEX (samtools-C specific)]'
-		'-X[output FLAG in string (samtools-C specific)]'
+		'-U+[output reads not selected by filters to FILE]:file:_files'
+		'-x[read tag to strip]:str:'
 		'*:files:_files'
 	)
 	_arguments -w -s -S $args[@] && ret=0
@@ -241,25 +246,41 @@ _samtools() {
 	if ((CURRENT == 2)); then
 		args+=(
 			'1:command:((
-				bamshuf:shuffle\ and\ group\ alignments\ by\ name
-				bedcov:read\ depth\ per\ BED\ region
-				calmd:recalculate\ MD\/NM\ tags\ and\ =\ bases
-				cat:concatenate\ BAMs
-				depth:compute\ the\ depth
+				# samtools v1.8
+				# -- Indexing
+				dict:create\ a\ sequence\ dictionary\ file
 				faidx:index/extract\ FASTA
-				fixmate:fix\ mate\ information
-				flagstat:simple\ stats
-				idxstats:BAM\ index\ stats\ \(r595\ or\ later\)
 				index:index\ alignment
-				merge:merge\ sorted\ alignments
-				mpileup:multi-way\ pileup
-				phase:phase\ heterozygotes
+				# -- Editing
+				calmd:recalculate\ MD/NM\ tags\ and\ \"=\"\ bases
+				fixmate:fix\ mate\ information
 				reheader:replace\ BAM\ header
-				rmdup:remove\ PCR\ duplicates
-				sort:sort\ alignment\ file
 				targetcut:cut\ fosmid\ regions\ \(for\ fosmid\ pool\ only\)
+				addreplacerg:adds\ or\ replaces\ RG\ tags
+				markdup:mark\ duplicates
+				collate:shuffle\ and\ group\ alignments\ by\ name
+				cat:concatenate\ BAMs
+				merge:merge\ sorted\ alignments
+				mpileup:multi\-way\ pileup
+				sort:sort\ alignment\ file
+				split:splits\ a\ file\ by\ read\ group
+				quickcheck:quickly\ check\ if\ SAM/BAM/CRAM\ file\ appears\ intact
+				fastq:converts\ a\ BAM\ to\ a\ FASTQ
+				fasta:converts\ a\ BAM\ to\ a\ FASTA
+				# -- Statistics
+				bedcov:read\ depth\ per\ BED\ region
+				depth:compute\ the\ depth
+				flagstat:simple\ stats
+				idxstats:BAM\ index\ stats
+				phase:phase\ heterozygotes
+				stats:generate\ stats\ \(former\ bamcheck\)
+				# -- Viewing
+				flags:explain\ BAM\ flags
 				tview:text\ alignment\ viewer
-				view:SAM\<\-\>BAM\ conversion
+				view:SAM\<\-\>BAM\<\-\>CRAM\ conversion
+				depad:convert\ padded\ BAM\ to\ unpadded\ BAM
+				# deprecated?
+				rmdup:remove\ PCR\ duplicates
 			))'
 			'(- *)--help[Display help message]'
 		)
@@ -276,4 +297,3 @@ _samtools() {
 }
 
 _samtools
-
