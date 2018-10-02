@@ -1,6 +1,6 @@
-#compdef bedtools annotateBed bamToBed bamToFastq bed12ToBed6 bedpeToBam bedToBam closestBed complementBed coverageBed fisher flankBed genomeCoverageBed fastaFromBed bedToIgv
+#compdef bedtools annotateBed bamToBed bamToFastq bed12ToBed6 bedpeToBam bedToBam closestBed complementBed coverageBed fisher flankBed genomeCoverageBed fastaFromBed bedToIgv intersectBed mergeBed maskFastaFromBed
 
-# all aliases shoudl also be in the compdef line above
+# all aliases should also be in the compdef line above
 local -A aliases
 aliases[annotateBed]="annotate"
 aliases[bamToBed]="bamtobed"
@@ -16,6 +16,9 @@ aliases[flankBed]="flank"
 aliases[genomeCoverageBed]="genomecov"
 aliases[fastaFromBed]="getfasta"
 aliases[bedToIgv]="igv"
+aliases[intersectBed]="intersect"
+aliases[mergeBed]="merge"
+aliases[maskFastaFromBed]="maskfasta"
 
 _bedtools-annotate() {
 	echo "annotate $#" >> deleteme
@@ -317,6 +320,7 @@ _bedtools-getfasta() {
 		'-fi[input fasta file]:file:_files'
 		'-fo[ouput file]:file:_files'
 		'-name[Use the name field for the FASTA header]:string:'
+		'-name\+[Use the name field and coordinates for the FASTA header]:string:'
 		'-tab[Write output in TAB delimited format]'
 		'-s[Force strandedness]'
 		'-fullHeader[Use full fasta header]'
@@ -338,6 +342,103 @@ _bedtools-igv() {
 		'-name[Use the "name" field (column 4) for each image filename]'
 		'-slop[Number of flanking base pairs on the left and right of the image]:int:'
 		'-img[The type of image to be created]:type:(png eps svg)'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_bedtools-intersect() {
+	integer ret=0
+	local -a args
+	args+=(
+		"$extra_arg"
+		'-a[input file]:file:_files -g \*.\(bed\|gff\|vcf\|bam\)'
+		'-b[input file]:file:_files -g \*.\(bed\|gff\|vcf\|bam\)'
+		'-wa[Write the original entry in A for each overlap]'
+		'-wb[Write the original entry in B for each overlap]'
+		'-loj[Perform a "left outer join"]'
+		'-wo[Write the original A and B entries plus the number of base pairs of overlap between the two features (only A features with overlap are reported)]'
+		'-wao[Write the original A and B entries plus the number of base pairs of overlap between the two features (features w/o overlap are also reported)]'
+		'-u[Write the original A entry _once_ if _any_ overlaps found in B]'
+		'-c[For each entry in A, report the number of overlaps with B]'
+		'-v[Only report those entries in A that have _no overlaps_ with B]'
+		'-ubam[Write uncompressed BAM output (default writes compressed BAM)]'
+		'-s[Require same strandedness]'
+		'-S[Require different strandedness]'
+		'-f[Minimum overlap required as a fraction of A]:float:'
+		'-F[Minimum overlap required as a fraction of B]:float:'
+		'-r[Require that the fraction overlap be reciprocal for A AND B]'
+		'-e[Require that the minimum fraction be satisfied for A OR B]'
+		'-split[Treat "split" BAM or BED12 entries as distinct BED intervals]'
+		'-g[Provide a genome file to enforce consistent chromosome sort order across input files (only applies when used with -sorted option)]:file:_files'
+		'-nonamecheck[For sorted data, do not throw an error if the file has different naming conventions for the same chromosome]'
+		'-sorted[Use the "chromsweep" algorithm for sorted (-k1,1 -k2,2n) input]'
+		'-names[When using multiple databases, provide an alias for each that will appear instead of a fileId when also printing the DB record]'
+		'-filenames[When using multiple databases, show each complete filename instead of a fileId when also printing the DB record]'
+		'-sortout[When using multiple databases, sort the output DB hits for each record]'
+		'-bed[If using BAM input, write output as BED]'
+		'-header[Print the header from the A file prior to results]'
+		'-nobuf[Disable buffered output]'
+		'-iobuf[Specify amount of memory to use for input buffer]:int:'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_bedtools-maskfasta() {
+	integer ret=0
+	local -a args
+	args+=(
+		"$extra_arg"
+		'-bed[features records]:file:_files -g \*.\(bed\|gff\|vcf\)'
+		'-fi[input fasta file]:file:_files'
+		'-fo[ouput file]:file:_files'
+		'-soft[Mask with lower-case bases, instead of masking with Ns]'
+		'-mc[Replace masking character]:str:'
+		'-fullHeader[Use full fasta header]'
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
+_bedtools-merge() {
+	integer ret=0
+	local -a args
+	args+=(
+		"$extra_arg"
+		'-i[input file]:file:_files -g \*.\(bed\|gff\|vcf\)'
+		'-s[Force strandedness]'
+		'-S[Force merge for one specific strand only]'
+		'-d[Maximum distance between features allowed for features to be merged]:int:'
+		'-c[Specify columns from the B file to map onto intervals in A (default: 5, multiple columns can be specified in a comma-delimited list)]:int:'
+		'-o[Specify the operation that should be applied to -c (default: sum, multiple columns can be specified in a comma-delimited list)]:str:((
+			sum
+			min
+			max
+			absmin
+			absmax
+			mean
+			median
+			mode
+			antimode
+			stdev
+			sstdev
+			collapse\:print\ a\ delimited\ list\ \(duplicates\ allowed\)
+			distinct\:print\ a\ delimited\ list\ \(NO\ duplicates\ allowed\)
+			distinct_sort_num\:as\ distinct\,\ sorted\ numerically\,\ ascending
+			distinct_sort_num_desc\:as\ distinct\,\ sorted\ numerically\,\ desscending
+			distinct_only\:delimited\ list\ of\ only\ unique\ values
+			count
+			count_distinct\:a\ count\ of\ the\ unique\ values\ in\ the\ column
+			first\:just\ the\ first\ value\ in\ the\ column
+			last\:just\ the\ last\ value\ in\ the\ column
+		))'
+		'-delim[Specify a custom delimiter for the collapse operations (default: ",")]:str:'
+		'-prec[Sets the decimal precision for output (default: 5)]:int:'
+		'-bed[If using BAM input, write output as BED]'
+		'-header[Print the header from the A file prior to results]'
+		'-nobuf[Disable buffered output]'
+		'-iobuf[Specify amount of memory to use for input buffer]:int:'
 	)
 	_arguments $args[@] && ret=0
 	return ret
@@ -394,6 +495,7 @@ _bedtools-main() {
 				random\:Generate\ random\ intervals\ in\ a\ genome
 				reldist\:Calculate\ the\ distribution\ of\ relative\ distances\ b/w\ two\ files
 				sample\:Sample\ random\ records\ from\ file\ using\ reservoir\ sampling
+				shift\:Adjust\ the\ position\ of\ intervals
 				shuffle\:Randomly\ redistrubute\ intervals\ in\ a\ genome
 				slop\:Adjust\ the\ size\ of\ intervals
 				sort\:Order\ the\ intervals\ in\ a\ file
@@ -422,7 +524,3 @@ if [[ $service == bedtools ]]; then
 else
 	_bedtools-subcommand $aliases[$service]
 fi
-
-
-
-
