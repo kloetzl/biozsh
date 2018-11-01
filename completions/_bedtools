@@ -21,7 +21,6 @@ aliases[mergeBed]="merge"
 aliases[maskFastaFromBed]="maskfasta"
 
 _bedtools-annotate() {
-	echo "annotate $#" >> deleteme
 	local ret=1
 	local -a args
 	if [[ $service == bedtools ]]; then
