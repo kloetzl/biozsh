@@ -43,7 +43,7 @@ _bedtools-annotate() {
 }
 
 _bedtools-bamtobed() {
-	integer ret=0
+	integer ret=1
 	local -a args
 	if [[ $service == bedtools ]]; then
 		args+=('1:command:')
@@ -67,7 +67,7 @@ _bedtools-bamtobed() {
 }
 
 _bedtools-bamtofastq() {
-	integer ret=0
+	integer ret=1
 	local -a args
 	args+=(
 		"$extra_arg"
@@ -81,7 +81,7 @@ _bedtools-bamtofastq() {
 }
 
 _bedtools-bed12tobed6() {
-	integer ret=0
+	integer ret=1
 	local -a args
 	args+=(
 		"$extra_arg"
@@ -93,7 +93,7 @@ _bedtools-bed12tobed6() {
 }
 
 _bedtools-bedpetobam() {
-	integer ret=0
+	integer ret=1
 	local -a args
 	args+=(
 		"$extra_arg"
@@ -107,7 +107,7 @@ _bedtools-bedpetobam() {
 }
 
 _bedtools-bedtobam() {
-	integer ret=0
+	integer ret=1
 	local -a args
 	args+=(
 		"$extra_arg"
@@ -122,7 +122,7 @@ _bedtools-bedtobam() {
 }
 
 _bedtools-closest() {
-	integer ret=0
+	integer ret=1
 	local -a args
 	args+=(
 		"$extra_arg"
@@ -172,7 +172,7 @@ _bedtools-closest() {
 }
 
 _bedtools-cluster() {
-	integer ret=0
+	integer ret=1
 	local -a args
 	args+=(
 		"$extra_arg"
@@ -185,7 +185,7 @@ _bedtools-cluster() {
 }
 
 _bedtools-complement() {
-	integer ret=0
+	integer ret=1
 	local -a args
 	args+=(
 		"$extra_arg"
@@ -197,7 +197,7 @@ _bedtools-complement() {
 }
 
 _bedtools-coverage() {
-	integer ret=0
+	integer ret=1
 	local -a args
 	args+=(
 		"$extra_arg"
@@ -229,7 +229,7 @@ _bedtools-coverage() {
 }
 
 _bedtools-expand() {
-	integer ret=0
+	integer ret=1
 	local -a args
 	args+=(
 		"$extra_arg"
@@ -241,7 +241,7 @@ _bedtools-expand() {
 }
 
 _bedtools-fisher() {
-	integer ret=0
+	integer ret=1
 	local -a args
 	args+=(
 		"$extra_arg"
@@ -267,7 +267,7 @@ _bedtools-fisher() {
 }
 
 _bedtools-flank() {
-	integer ret=0
+	integer ret=1
 	local -a args
 	args+=(
 		"$extra_arg"
@@ -286,7 +286,7 @@ _bedtools-flank() {
 
 
 _bedtools-genomecov() {
-	integer ret=0
+	integer ret=1
 	local -a args
 	args+=(
 		"$extra_arg"
@@ -311,7 +311,7 @@ _bedtools-genomecov() {
 }
 
 _bedtools-getfasta() {
-	integer ret=0
+	integer ret=1
 	local -a args
 	args+=(
 		"$extra_arg"
@@ -330,7 +330,7 @@ _bedtools-getfasta() {
 }
 
 _bedtools-igv() {
-	integer ret=0
+	integer ret=1
 	local -a args
 	args+=(
 		"$extra_arg"
@@ -348,7 +348,7 @@ _bedtools-igv() {
 }
 
 _bedtools-intersect() {
-	integer ret=0
+	integer ret=1
 	local -a args
 	args+=(
 		"$extra_arg"
@@ -386,7 +386,7 @@ _bedtools-intersect() {
 }
 
 _bedtools-maskfasta() {
-	integer ret=0
+	integer ret=1
 	local -a args
 	args+=(
 		"$extra_arg"
@@ -402,7 +402,7 @@ _bedtools-maskfasta() {
 }
 
 _bedtools-merge() {
-	integer ret=0
+	integer ret=1
 	local -a args
 	args+=(
 		"$extra_arg"
