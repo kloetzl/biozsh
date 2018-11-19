@@ -15,7 +15,7 @@ _subl() {
 		"($I -b --background)"{-b,--background}'[Do not activate the application]'
 
 	)
-	_arguments $args[@] '*:file:_files' && ret=0
+	_arguments $args[@] '*:file:_files -F \*.o' && ret=0
 	return ret
 }
 
