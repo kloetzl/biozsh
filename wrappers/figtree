@@ -2,7 +2,8 @@
 
 # Make figtree read from stdin in pipelines if no arg was given
 if [[ $# -ne 0 ]]; then
-	figtree "$@"
+	# hide swing messages
+	figtree "$@" | tail -n +5 &
 else
-	figtree =(cat -)
+	figtree =(cat -) | tail -n +5 &
 fi
