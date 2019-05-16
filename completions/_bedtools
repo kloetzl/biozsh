@@ -400,6 +400,27 @@ _bedtools-maskfasta() {
 	return ret
 }
 
+_bedtools-makewindows() {
+	integer ret=1
+	local -a args
+	args+=(
+		"$extra_arg"
+		'-g[genome file]:file:_files'
+		'-b[BED file]:file:_files -g \*.bed'
+		'-w[window size]:int:'
+		'-s[step size]:int:'
+		'-n[number of windows]:int:'
+		'-reverse[reverse numbering]'
+		"-i[ID naming]:str:((
+			src\:use\ the\ source\ interval\'s\ name
+			winnum\:use\ the\ window\ number\ as\ the\ ID
+			srcwinnum\:use\ the\ source\ interval\'s\ name\ with\ the\ window\ number
+		))"
+	)
+	_arguments $args[@] && ret=0
+	return ret
+}
+
 _bedtools-merge() {
 	integer ret=1
 	local -a args
@@ -451,6 +472,7 @@ _bedtools-subcommand() {
 	local subcmd=_bedtools-$1
 	if ! _call_function ret $subcmd; then
 		_message "unknown subcomand: $subcmd"
+		_arguments '*:file:_files'
 	fi
 	return ret
 }
