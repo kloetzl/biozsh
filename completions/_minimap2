@@ -1,0 +1,68 @@
+#compdef minimap2
+
+# author: Joseph Lee
+# date: 20190524
+# minimap2 2.15
+
+_minimap2() {
+    local ret=1
+    local -a args
+    args+=(
+        "-H[use homopolymer-compressed k-mer]"
+        "-k[k-mer size]:int:"
+        "-w[minizer window size]:int:"
+        "-I[split index for every ~NUM input bases]:num:"
+        "-d[dump index to FILE]:file:_files"
+        "-f[filter out top FLOAT fraction of repetitive minimizers]:float:"
+        "-g[stop chain enlongation if there are no minimizers in INT-bp]:num:"
+        "-G[max intron length (effective with -xsplice; changing -r)]:num:"
+        "-F[max fragment length (effective with -xsr or in the fragment mode)]:num:"
+        "-r[bandwidth used in chaining and DP-based alignment]:num:"
+        "-n[minimal number of minimizers on a chain]:int:"
+        "-m[minimal chaining score (matching bases minus log gap penalty)]:int:"
+        "-X[skip self and dual mappings (for the all-vs-all mode)]"
+        "-p[min secondary-to-primary score ratio]:float:"
+        "-N[retain at most INT secondary alignments]:int:"
+        "-A[matching score]:int:"
+        "-B[mismatch penalty]:int:"
+        "-O[gap open penalty]:int:"
+        "-E[gap extension penalty; a k-long gap costs min{O1+k*E1,O2+k*E2}]:int:"
+        "-z[Z-drop score and inversion Z-drop score]:int:"
+        "-s[minimal peak DP alignment score]:int:"
+        "-u[how to find GT-AG]:str:((
+            f\:transcript\ strand
+            b\:both\ strands
+            n\:don\'t\ match\ GT\-AG
+        ))"
+        "-a[output in the SAM format (PAF by default)]"
+        "-Q[don't output base quality in SAM]"
+        "-L[write CIGAR with >65535 ops at the CG tag]"
+        "-R[SAM read group line in a format like '@RG\tID:foo\tSM:bar']:str:"
+        "-c[output CIGAR in PAF]"
+        "--cs[output the cs tag]:str:((
+            short
+            long
+        ))"
+        "--MD[output the MD tag]"
+        "--eqx[write =/X CIGAR operators]"
+        "-Y[use soft clipping for supplementary alignments]"
+        "-t[number of threads]:int:"
+        "-K[minibatch size for mapping]:num:"
+        "--version[show version number]"
+        "-x[preset]:str:((
+            map-pb\:PacBio\ vs\ reference\ mapping
+            map-ont\:Nanopore\ vs\ reference\ mapping
+            ava-pb\:PacBio\ read\ overlap
+            ava-ont\:Nanopore\ read\ overlap
+            asm5\:asm\-to\-ref\ mapping\,\ for\ \~0\.1\%\ sequence\ divergence
+            asm10\:asm\-to\-ref\ mapping\,\ for\ \~1\%\ sequence\ divergence
+            asm20\:asm\-to\-ref\ mapping\,\ for\ \~5\%\ sequence\ divergence
+            splice\:long\-read\ spliced\ alignment
+            sr\:genomic\ short\-read\ mapping
+        ))"
+    )
+    _arguments -s $args[@] && ret=0
+    return ret
+}
+
+_minimap2
