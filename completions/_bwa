@@ -111,9 +111,9 @@ _bwa-index() {
 	args+=(
 		'1:subcommand:'
 		'*:in.fasta:_files'
-		'-a+[BWT construction algorithm]:str:(bwtsw is div)'
+		'-a+[BWT construction algorithm]:str:(bwtsw is rb2)'
 		'-b+[block size for the bwtsw algorithm (effective with -a bwtsw, default: 10000000)]:int:'
-		'-p+[prefix of the index (same as fasta name)]:str:'
+		'-p+[prefix of the index (same as fasta name)]:str:_files'
 		'-6[index files named as <in.fasta>.64.* instead of <in.fasta>.*]'
 	)
 	_arguments -s -w -S $args[@] && ret=0
