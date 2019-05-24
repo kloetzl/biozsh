@@ -283,15 +283,14 @@ _bedtools-flank() {
 	return ret
 }
 
-
 _bedtools-genomecov() {
 	integer ret=1
 	local -a args
 	args+=(
 		"$extra_arg"
-		'-i[features records]:file:_files -g \*.\(bed\|gff\|vcf\|bam\)'
+		'-i[features records]:file:_files -g \*.\(bed\|gff\|vcf\)'
 		'-g[genome]:file:_files'
-		'-ibam[The input file is in BAM format]'
+		'-ibam[The input file is in BAM format]:file:_files -g \*.bam'
 		'(-max -dz)-d[Report the depth at each genome position (with one-based coordinates)]'
 		'(-max -d)-dz[Report the depth at each genome position (with zero-based coordinates)]'
 		'(-dz -d)-max[Combine all positions with a depth >= max into a single bin]'
