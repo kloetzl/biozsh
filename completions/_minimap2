@@ -39,17 +39,14 @@ _minimap2() {
         "-L[write CIGAR with >65535 ops at the CG tag]"
         "-R[SAM read group line in a format like '@RG\tID:foo\tSM:bar']:str:"
         "-c[output CIGAR in PAF]"
-        "--cs[output the cs tag]:str:((
-            short
-            long
-        ))"
+        "--cs[output the cs tag]::tag:(short long)"
         "--MD[output the MD tag]"
         "--eqx[write =/X CIGAR operators]"
         "-Y[use soft clipping for supplementary alignments]"
         "-t[number of threads]:int:"
         "-K[minibatch size for mapping]:num:"
         "--version[show version number]"
-        "-x[preset]:str:((
+        "-x[preset]:preset:((
             map-pb\:PacBio\ vs\ reference\ mapping
             map-ont\:Nanopore\ vs\ reference\ mapping
             ava-pb\:PacBio\ read\ overlap
@@ -60,6 +57,7 @@ _minimap2() {
             splice\:long\-read\ spliced\ alignment
             sr\:genomic\ short\-read\ mapping
         ))"
+        '*:file:_files'
     )
     _arguments -s $args[@] && ret=0
     return ret
