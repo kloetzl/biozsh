@@ -215,15 +215,17 @@ _samtools-view() {
 		'-b[output BAM]'
 		'-c[print only the count of matching records]'
 		'-C[output CRAM (requires -T)]'
-		'-F+[filtering flag, 0 for unset (default: 0)]:int:'
-		'-f+[required flag, 0 for unset (default: 0)]:int:'
+		'-F+[filtering flag, 0 for unset (default: 0)]:flag:->flags'
+		'-f+[required flag, 0 for unset (default: 0)]:flag:->flags'
 		'-h[print header for the SAM output]'
 		'-H[print header only (no alignments)]'
 		'-l+[only output reads in library STR (default: null)]:str:'
 		'-L+[output alignments overlapping the input BED FILE (default: null)]:file:_files'
 		'-M[use the multi-region iterator]'
+		'-N+[output only alignments with read name listed in FILE]:file:_files'
 		'-o+[output file name (default: stdout)]:file:_files'
 		'-O+[output format]:str:(SAM BAM CRAM)'
+		'-P[Retrieve pairs even when the mate is outside of the requested region]'
 		'-q+[minimum mapping quality (default: 0)]:int:'
 		'-R+[list of read groups to be outputted (default: null)]:file:_files'
 		'-r+[only output reads in read group STR (default: null)]:str:'
@@ -237,6 +239,11 @@ _samtools-view() {
 		'*:files:_files'
 	)
 	_arguments -w -s -S $args[@] && ret=0
+	case "$state" in
+		(flags)
+		_values -s , 'flags' unmap munmap secondary supplementary qcfail dup paired proper_pair reverse mreverse read1 read2
+		;;
+	esac
 	return ret
 }
 
